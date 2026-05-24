@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HarmonicAI – Trustworthy AI for Healthcare</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0e17;
+        --surface: #111827;
+        --surface2: #1a2236;
+        --border: rgba(255, 255, 255, 0.07);
+        --text: #f0f4ff;
+        --muted: #6b7fa0;
+        --accent: #3b82f6;
+        --c1: #3b82f6;
+        --c2: #10b981;
+        --c3: #f59e0b;
+        --c4: #8b5cf6;
+        --c5: #ec4899;
+        --c6: #06b6d4;
+        --cbiais: #a78bfa;
+        --cmetric: #34d399;
+        --cnorme: #fb923c;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      .lang-toggle {
+        position: fixed;
+        top: 1.2rem;
+        right: 1.5rem;
+        z-index: 999;
+        display: flex;
+        gap: 0;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 3px;
+        backdrop-filter: blur(12px);
+      }
+      .lang-btn {
+        background: none;
+        border: none;
+        color: var(--muted);
+        font-family: "Inter", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 500;
+        padding: 0.3rem 0.85rem;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: all 0.25s;
+        letter-spacing: 0.05em;
+      }
+      .lang-btn.active {
+        background: var(--accent);
+        color: #fff;
+      }
+      #main-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(10, 14, 23, 0.85);
+        padding: 0 2rem;
+        border-bottom: 1px solid var(--border);
+        overflow-x: auto;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(16px);
+      }
+      .nav-tab {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.45);
+        padding: 0.85rem 1.8rem;
+        font-family: "Inter", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        white-space: nowrap;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .nav-tab.on {
+        color: #fff;
+        border-bottom-color: var(--accent);
+      }
+      .nav-tab:hover:not(.on) {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      #hero-section {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          #0a0e17 0%,
+          #050810 40%,
+          #0d0a1a 100%
+        );
+        z-index: 0;
+      }
+      .hero-bg::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(
+            rgba(59, 130, 246, 0.06) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
+        background-size: 60px 60px;
+        mask-image: radial-gradient(
+          ellipse 80% 60% at 50% 40%,
+          black 30%,
+          transparent 100%
+        );
+      }
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: orbFloat 8s ease-in-out infinite;
+      }
+      .orb-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(59, 130, 246, 0.2) 0%,
+          transparent 70%
+        );
+        top: -100px;
+        left: -100px;
+        animation-delay: 0s;
+      }
+      .orb-2 {
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(139, 92, 246, 0.15) 0%,
+          transparent 70%
+        );
+        top: 10%;
+        right: -150px;
+        animation-delay: 3s;
+      }
+      .orb-3 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(
+          circle,
+          rgba(16, 185, 129, 0.12) 0%,
+          transparent 70%
+        );
+        bottom: 100px;
+        left: 30%;
+        animation-delay: 5s;
+      }
+      @keyframes orbFloat {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-30px) scale(1.05);
+        }
+      }
+      .hero-content {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        padding: 6rem 2rem 6rem;
+        text-align: center;
+        gap: 2rem;
+      }
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.25);
+        border-radius: 100px;
+        padding: 0.35rem 1rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #60a5fa;
+        animation: fadeUp 0.8s ease both;
+      }
+      .hero-eyebrow::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #3b82f6;
+        animation: pulse 2s ease infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(0.7);
+        }
+      }
+      .hero-title {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(3rem, 7vw, 6.5rem);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        animation: fadeUp 0.8s 0.1s ease both;
+      }
+      .hero-title em {
+        font-style: italic;
+        color: #7eb8e8;
+      }
+      .hero-sub {
+        max-width: 620px;
+        font-size: 1.1rem;
+        color: var(--muted);
+        line-height: 1.7;
+        font-weight: 400;
+        animation: fadeUp 0.8s 0.2s ease both;
+      }
+      .hero-tags {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        animation: fadeUp 0.8s 0.3s ease both;
+      }
+      .hero-tag {
+        padding: 0.45rem 1.1rem;
+        border-radius: 100px;
+        font-size: 0.78rem;
+        font-weight: 500;
+        border: 1px solid;
+        letter-spacing: 0.03em;
+      }
+      .tag-blue {
+        background: rgba(59, 130, 246, 0.08);
+        border-color: rgba(59, 130, 246, 0.3);
+        color: #93c5fd;
+      }
+      .tag-purple {
+        background: rgba(139, 92, 246, 0.08);
+        border-color: rgba(139, 92, 246, 0.3);
+        color: #c4b5fd;
+      }
+      .tag-green {
+        background: rgba(16, 185, 129, 0.08);
+        border-color: rgba(16, 185, 129, 0.3);
+        color: #6ee7b7;
+      }
+      .tag-amber {
+        background: rgba(245, 158, 11, 0.08);
+        border-color: rgba(245, 158, 11, 0.3);
+        color: #fcd34d;
+      }
+      .hero-stats {
+        display: flex;
+        gap: 0;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        animation: fadeUp 0.8s 0.4s ease both;
+      }
+      .stat-item {
+        padding: 1.4rem 2.5rem;
+        text-align: center;
+        border-right: 1px solid var(--border);
+      }
+      .stat-item:last-child {
+        border-right: none;
+      }
+      .stat-num {
+        font-family: "Inter", sans-serif;
+        font-size: 2rem;
+        font-weight: 500;
+        color: var(--text);
+        display: block;
+      }
+      .stat-label {
+        font-size: 0.7rem;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-top: 0.25rem;
+      }
+      .hero-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 900px;
+        animation: fadeUp 0.8s 0.5s ease both;
+      }
+      .hero-card {
+        background: var(--surface);
+        padding: 2rem 1.8rem;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s;
+      }
+      .hero-card:hover {
+        background: var(--surface2);
+      }
+      .hero-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+      }
+      .hero-card:nth-child(1)::before {
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      }
+      .hero-card:nth-child(2)::before {
+        background: linear-gradient(90deg, #10b981, #06b6d4);
+      }
+      .hero-card:nth-child(3)::before {
+        background: linear-gradient(90deg, #f59e0b, #ec4899);
+      }
+      .hcard-title {
+        font-family: "Playfair Display", serif;
+        font-size: 1.3rem;
+        font-weight: 400;
+        margin-bottom: 0.6rem;
+      }
+      .hcard-desc {
+        font-size: 0.83rem;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+      .usecase-banner {
+        margin: 2rem;
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.08) 0%,
+          rgba(139, 92, 246, 0.08) 100%
+        );
+        border: 1px solid rgba(59, 130, 246, 0.15);
+        border-radius: 20px;
+        padding: 2rem 2.5rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1.5rem;
+        position: relative;
+        z-index: 10;
+      }
+      .uc-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      .uc-country {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .uc-desc {
+        font-size: 0.85rem;
+        color: var(--text);
+        line-height: 1.5;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      #intro-section {
+        display: none;
+        padding: 2rem 2.5rem 4rem;
+        max-width: 1080px;
+        margin: 0 auto;
+      }
+      .section-header {
+        margin-bottom: 2.5rem;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .section-title {
+        font-family: "Playfair Display", serif;
+        font-size: 2.2rem;
+        font-weight: 400;
+        color: #7eb8e8;
+        line-height: 1.15;
+      }
+      .section-sub {
+        font-size: 0.82rem;
+        color: var(--muted);
+        line-height: 1.6;
+        text-align: right;
+        letter-spacing: 0.04em;
+      }
+      .def-hero {
+        background: linear-gradient(
+          135deg,
+          var(--surface) 0%,
+          var(--surface2) 100%
+        );
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: center;
+      }
+      .def-quote-block {
+        position: relative;
+        padding-left: 1.5rem;
+      }
+      .def-quote-block::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+        border-radius: 2px;
+      }
+      .def-quote-text {
+        font-family: "Playfair Display", serif;
+        font-size: 1.25rem;
+        font-style: italic;
+        line-height: 1.6;
+        color: var(--text);
+        margin-bottom: 0.7rem;
+      }
+      .def-quote-src {
+        font-family: "Inter", sans-serif;
+        font-size: 0.65rem;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+      .def-key-points {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+      .def-kp {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        background: rgba(59, 130, 246, 0.05);
+        border: 1px solid rgba(59, 130, 246, 0.15);
+        border-radius: 12px;
+        padding: 0.9rem 1rem;
+        font-size: 0.78rem;
+        line-height: 1.55;
+        color: var(--muted);
+        animation: fadeUp 0.6s ease both;
+        transition: border-color 0.25s, background 0.25s;
+      }
+      .def-kp:hover {
+        border-color: rgba(59, 130, 246, 0.35);
+        background: rgba(59, 130, 246, 0.08);
+      }
+      .def-kp:nth-child(5) {
+        grid-column: 1 / -1;
+      }
+      .def-kp .iso-tag {
+        flex-shrink: 0;
+        background: rgba(59, 130, 246, 0.15);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: #60a5fa;
+        border-radius: 20px;
+        padding: 0.15rem 0.6rem;
+        font-family: "Inter", sans-serif;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        width: fit-content;
+      }
+      .bias-cols {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .bias-col {
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+      .bias-col-header {
+        padding: 1.1rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .bias-col-name {
+        font-family: "Playfair Display", serif;
+        font-size: 1.05rem;
+        font-weight: 400;
+      }
+      .bias-col-en {
+        font-size: 0.62rem;
+        color: var(--muted);
+        font-family: "Inter", sans-serif;
+        letter-spacing: 0.03em;
+      }
+      .bias-col-body {
+        padding: 0 1.2rem 1.2rem;
+        background: var(--surface);
+      }
+      .bias-col-desc {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 0.8rem;
+        padding-top: 0.2rem;
+      }
+      .bias-tag-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+      .bias-tag {
+        font-size: 0.73rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--muted);
+      }
+      .bias-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .citations-section {
+        margin-top: 2rem;
+      }
+      .citations-title {
+        font-size: 0.65rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 1rem;
+        padding-left: 0.5rem;
+        border-left: 2px solid var(--accent);
+      }
+      .citations-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .citation-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.4rem;
+        position: relative;
+        overflow: hidden;
+        transition: border-color 0.25s;
+      }
+      .citation-card:hover {
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+      .citation-accent {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+      }
+      .citation-num {
+        font-family: "Inter", sans-serif;
+        font-size: 0.62rem;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        margin-bottom: 0.8rem;
+      }
+      .citation-quote {
+        font-family: "Playfair Display", serif;
+        font-size: 0.92rem;
+        font-style: italic;
+        line-height: 1.65;
+        color: var(--text);
+        margin-bottom: 1rem;
+      }
+      .citation-divider {
+        height: 1px;
+        background: var(--border);
+        margin-bottom: 0.8rem;
+      }
+      .citation-authors {
+        font-family: "Inter", sans-serif;
+        font-size: 0.63rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .citation-authors strong {
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 500;
+      }
+      .citation-year {
+        display: inline-block;
+        margin-top: 0.4rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+        padding: 0.1rem 0.4rem;
+        font-size: 0.6rem;
+        letter-spacing: 0.08em;
+      }
+      #cycle-section {
+        display: none;
+      }
+      .stat-clickable {
+        cursor: pointer;
+        transition: background 0.2s, transform 0.15s;
+      }
+      .stat-clickable:hover {
+        background: rgba(59, 130, 246, 0.08);
+        transform: scale(1.04);
+      }
+      .stat-clickable:hover .stat-num {
+        color: #60a5fa;
+      }
+      .wp-item {
+        display: flex;
+        gap: 0.8rem;
+        align-items: flex-start;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+      .wp-item:last-child { border-bottom: none; }
+      .wp-num {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: rgba(59,130,246,0.15);
+        border: 1px solid rgba(59,130,246,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #60a5fa;
+        font-family: 'Inter', sans-serif;
+      }
+      .wp-info-title {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #f0f4ff;
+        margin-bottom: 0.2rem;
+        font-family: 'Inter', sans-serif;
+      }
+      .wp-info-desc {
+        font-size: 0.74rem;
+        color: #6b7fa0;
+        line-height: 1.5;
+        font-family: 'Inter', sans-serif;
+      }
+      .wp-badge {
+        flex-shrink: 0;
+        font-size: 0.58rem;
+        padding: 0.1rem 0.45rem;
+        border-radius: 4px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        margin-top: 0.1rem;
+      }
+      .badge-ri { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+      .badge-mgmt { background: rgba(139,92,246,0.12); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.25); }
+      .badge-diss { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+      .partner-item {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        padding: 0.55rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        font-family: 'Inter', sans-serif;
+      }
+      .partner-item:last-child { border-bottom: none; }
+      .partner-flag { font-size: 1.1rem; flex-shrink: 0; }
+      .partner-short { font-size: 0.72rem; font-weight: 700; color: #60a5fa; min-width: 60px; }
+      .partner-name { font-size: 0.78rem; color: #f0f4ff; flex: 1; }
+      .partner-type { font-size: 0.62rem; padding: 0.1rem 0.4rem; border-radius: 4px; }
+      .type-acad { background: rgba(59,130,246,0.1); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); }
+      .type-ind { background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.2); }
+      .type-hc { background: rgba(236,72,153,0.1); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.2); }
+
+      .screen-toggle {
+        position: fixed;
+        top: 1.2rem;
+        left: 1.5rem;
+        z-index: 999;
+        display: flex;
+        gap: 0;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 3px;
+        backdrop-filter: blur(12px);
+      }
+      .screen-btn {
+        background: none;
+        border: none;
+        color: var(--muted);
+        font-size: 0.75rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: all 0.25s;
+      }
+      .screen-btn.active {
+        background: var(--accent);
+        color: #fff;
+      }
+      /* Desktop - plein écran */
+      body.mode-desktop { background: var(--bg); }
+      body.mode-desktop .screen-wrapper { max-width: 100%; margin: 0; box-shadow: none; border-radius: 0; }
+      /* Laptop */
+      body.mode-laptop { background: #05080f; display: flex; justify-content: center; align-items: flex-start; }
+      body.mode-laptop .screen-wrapper { max-width: 1280px; width: 1280px; min-width: 1280px; box-shadow: 0 0 60px rgba(0,0,0,0.8); border-left: 1px solid var(--border); border-right: 1px solid var(--border); overflow-x: hidden; }
+      body.mode-laptop #main-nav { display: flex; flex-direction: row; position: sticky; }
+      body.mode-laptop .cycle-arena { width: 100% !important; }
+      /* Mobile */
+      body.mode-mobile { background: #05080f; display: flex; justify-content: center; padding: 2rem 0; }
+      body.mode-mobile .screen-wrapper { max-width: 390px; width: 390px; box-shadow: 0 0 0 8px #1a1a2e, 0 0 0 10px #2a2a4a, 0 20px 60px rgba(0,0,0,0.8); border-radius: 40px; overflow: hidden; min-height: 844px; }
+      body.mode-mobile #main-nav { flex-wrap: wrap; }
+      body.mode-mobile .nav-tab { padding: 0.7rem 0.9rem; font-size: 0.62rem; }
+      body.mode-mobile .hero-cards { grid-template-columns: 1fr; }
+      body.mode-mobile .hero-stats { flex-direction: column; }
+      body.mode-mobile .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+      body.mode-mobile .stat-item:last-child { border-bottom: none; }
+      body.mode-mobile .hero-content { padding: 4rem 1.2rem 3rem; gap: 1.2rem; }
+      body.mode-mobile .hero-title { font-size: 2.5rem; }
+      body.mode-mobile .hero-sub { font-size: 0.9rem; }
+      body.mode-mobile .bias-cols { grid-template-columns: 1fr; }
+      body.mode-mobile #intro-section { padding: 1.5rem 1rem 3rem; }
+      body.mode-mobile .section-header { flex-direction: column; gap: 0.3rem; }
+      body.mode-mobile .def-hero { grid-template-columns: 1fr; }
+      body.mode-mobile .cycle-arena { height: 420px; overflow: hidden; }
+      body.mode-mobile .cnode { width: 100px; }
+      body.mode-mobile .cnode-title { font-size: 0.65rem; }
+      body.mode-mobile .cnode-sub { font-size: 0.52rem; }
+      body.mode-mobile .cnode-chips { display: none; }
+      body.mode-mobile .cnode-num { width: 20px; height: 20px; font-size: 0.6rem; }
+      body.mode-mobile #cycle-panel { width: 100%; max-width: 390px; }
+      body.mode-mobile .cycle-header { padding: 1.5rem 1rem 1rem; }
+      body.mode-mobile .cycle-header-title { font-size: 1.4rem; }
+      body.mode-mobile .cycle-filters { gap: 0.3rem; }
+      body.mode-mobile .cf-btn { font-size: 0.65rem; padding: 0.3rem 0.7rem; }
+      body.mode-mobile .cycle-legend { display: none; }
+      body.mode-mobile .screen-toggle { left: 0.8rem; }
+      body.mode-mobile .lang-toggle { right: 0.8rem; }
+      body.mode-mobile #cycle-section {
+        zoom: 0.35;
+        transform-origin: top left;
+        width: calc(100% / 0.35);
+        overflow: hidden;
+      }
+      ::-webkit-scrollbar {
+        width: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--surface2);
+        border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+
+
+    <div class="screen-wrapper desktop" id="screenWrapper">
+    <div class="lang-toggle" id="langToggle">
+      <button class="lang-btn active" data-lang="fr" onclick="setLang('fr')">
+        FR
+      </button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">
+        EN
+      </button>
+    </div>
+
+    <div id="main-nav">
+      <img
+        src="logo.png"
+        alt="DISP Lab"
+        style="
+          height: 32px;
+          width: auto;
+          object-fit: contain;
+          margin-right: 1rem;
+          opacity: 0.95;
+          flex-shrink: 0;
+          margin-top: 6px;
+        "
+      />
+      <button
+        class="nav-tab on"
+        data-section="hero-section"
+        data-fr="Présentation"
+        data-en="Presentation"
+      >
+        Présentation
+      </button>
+      <button
+        class="nav-tab"
+        data-section="intro-section"
+        data-fr="Définitions & Biais"
+        data-en="Definitions & Bias"
+      >
+        Définitions &amp; Biais
+      </button>
+      <button
+        class="nav-tab"
+        data-section="cycle-section"
+        data-fr="Cycle de vie"
+        data-en="Lifecycle"
+      >
+        Cycle de vie
+      </button>
+    </div>
+
+    <div id="hero-section">
+      <div class="hero-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+      </div>
+      <div class="hero-content">
+        <div
+          class="hero-eyebrow"
+          data-fr="Projet MSCA Horizon Europe · 2023–2027"
+          data-en="MSCA Horizon Europe Project · 2023–2027"
+        >
+          Projet MSCA Horizon Europe · 2023–2027
+        </div>
+        <h1 class="hero-title">
+          <span data-fr="Une IA de santé" data-en="Healthcare AI"
+            >Une IA de santé</span
+          ><br />
+          <em data-fr="digne de confiance" data-en="worthy of trust"
+            >digne de confiance</em
+          >
+        </h1>
+        <p
+          class="hero-sub"
+          data-fr="HarmonicAI développe un cadre multi-objectifs pour concevoir des systèmes d'IA en santé qui soient simultanément explicables, équitables et respectueux de la vie privée."
+          data-en="HarmonicAI builds a multi-objective framework to design healthcare AI systems that are simultaneously explainable, fair and privacy-preserving."
+        >
+          HarmonicAI développe un cadre multi-objectifs pour concevoir des
+          systèmes d'IA en santé qui soient simultanément explicables,
+          équitables et respectueux de la vie privée.
+        </p>
+        <div class="hero-tags">
+          <span
+            class="hero-tag tag-blue"
+            data-fr="Explicabilité"
+            data-en="Explainability"
+            >Explicabilité</span
+          >
+          <span
+            class="hero-tag tag-green"
+            data-fr="Équité &amp; Débiaisage"
+            data-en="Fairness &amp; Debiasing"
+            >Équité &amp; Débiaisage</span
+          >
+          <span
+            class="hero-tag tag-purple"
+            data-fr="Confidentialité"
+            data-en="Privacy"
+            >Confidentialité</span
+          >
+          <span
+            class="hero-tag tag-amber"
+            data-fr="Optimisation multi-objectifs"
+            data-en="Multi-objective optimization"
+            >Optimisation multi-objectifs</span
+          >
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item stat-clickable" onclick="openStatModal('partners')">
+            <span class="stat-num">15</span
+            ><span class="stat-label" data-fr="Partenaires ↗" data-en="Partners ↗">Partenaires ↗</span>
+          </div>
+          <div class="stat-item stat-clickable" onclick="openStatModal('usecases')">
+            <span class="stat-num">3</span
+            ><span class="stat-label" data-fr="Cas d'usage ↗" data-en="Use cases ↗">Cas d'usage ↗</span>
+          </div>
+          <div class="stat-item stat-clickable" onclick="openStatModal('wps')">
+            <span class="stat-num">8</span
+            ><span class="stat-label" data-fr="Work Packages ↗" data-en="Work Packages ↗">Work Packages ↗</span>
+          </div>
+        </div>
+
+        <div id="stat-overlay" style="display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);" onclick="closeStatModal()"></div>
+        <div id="stat-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:801;background:#111827;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:0;max-width:580px;width:92vw;max-height:82vh;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.8);">
+          <div id="stat-modal-header" style="padding:1.4rem 1.6rem 1rem;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;">
+            <div id="stat-modal-title" style="font-family:'Playfair Display',serif;font-size:1.15rem;color:#7eb8e8;"></div>
+            <button onclick="closeStatModal()" style="background:none;border:none;color:#6b7fa0;cursor:pointer;font-size:1.2rem;line-height:1;">✕</button>
+          </div>
+          <div id="stat-modal-body" style="padding:1.2rem 1.6rem 1.6rem;overflow-y:auto;max-height:calc(82vh - 80px);scrollbar-width:thin;"></div>
+        </div>
+        <div class="hero-cards">
+          <div class="hero-card">
+            <div
+              class="hcard-title"
+              data-fr="Explicabilité"
+              data-en="Explainability"
+            >
+              Explicabilité
+            </div>
+            <div
+              class="hcard-desc"
+              data-fr="Transformer les boîtes noires en systèmes compréhensibles par les cliniciens grâce à outils d'explication et des métriques formelles."
+              data-en="Transforming black boxes into systems clinicians can understand through outils d'explication and formal metrics."
+            >
+              Transformer les boîtes noires en systèmes compréhensibles par les
+              cliniciens grâce à outils d'explication et des métriques formelles.
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="hcard-title" data-fr="Équité" data-en="Fairness">
+              Équité
+            </div>
+            <div
+              class="hcard-desc"
+              data-fr="Détecter et corriger les biais dans les données, les algorithmes et le déploiement pour des décisions justes pour tous les patients."
+              data-en="Detecting and correcting bias in data, algorithms and deployment for fair decisions across all patients."
+            >
+              Détecter et corriger les biais dans les données, les algorithmes
+              et le déploiement pour des décisions justes pour tous les
+              patients.
+            </div>
+          </div>
+          <div class="hero-card">
+            <div
+              class="hcard-title"
+              data-fr="Confidentialité"
+              data-en="Privacy"
+            >
+              Confidentialité
+            </div>
+            <div
+              class="hcard-desc"
+              data-fr="Apprentissage fédéré, chiffrement homomorphe et confidentialité différentielle pour protéger les données de santé sensibles."
+              data-en="Federated learning, homomorphic encryption and differential privacy to protect sensitive health data."
+            >
+              Apprentissage fédéré, chiffrement homomorphe et confidentialité
+              différentielle pour protéger les données de santé sensibles.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="intro-section">
+      <div class="section-header">
+        <h2
+          class="section-title"
+          data-fr="Définitions &amp; Biais"
+          data-en="Definitions &amp; Bias"
+        >
+          Définitions &amp; Biais
+        </h2>
+        <p class="section-sub" data-fr="ISO/IEC 22989 · Cycle de vie - ISO/IEC 24027 · Biais" data-en="ISO/IEC 22989 · Lifecycle - ISO/IEC 24027 · Bias">ISO/IEC 22989 · Cycle de vie - ISO/IEC 24027 · Biais</p>
+      </div>
+      <!-- BIAS WHEEL -->
+      <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:2.5rem;gap:1.5rem;">
+        <!-- Quote FIRST -->
+        <div style="max-width:620px;text-align:center;position:relative;padding:1.5rem 2rem;background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:16px;">
+          <div style="position:absolute;top:-1px;left:2rem;right:2rem;height:2px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;"></div>
+          <div style="font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;line-height:1.7;color:var(--text);"
+            data-fr="&laquo;&nbsp;Un biais en IA désigne une différence de traitement systématique entre groupes de patients, pouvant conduire à des résultats cliniquement inéquitables.&nbsp;&raquo;"
+            data-en="&laquo;&nbsp;AI bias refers to a systematic difference in treatment between groups of patients, potentially leading to clinically inequitable outcomes.&nbsp;&raquo;">
+            « Un biais en IA désigne une différence de traitement systématique entre groupes de patients, pouvant conduire à des résultats cliniquement inéquitables. »
+          </div>
+        </div>
+        <!-- Wheel SECOND - 3 dots -->
+        <div style="position:relative;width:260px;height:260px;" id="bias-wheel">
+          <svg viewBox="0 0 260 260" style="width:100%;height:100%;overflow:visible;">
+            <!-- Center circle -->
+            <circle cx="130" cy="130" r="55" fill="rgba(59,130,246,0.05)" stroke="rgba(59,130,246,0.15)" stroke-width="1"/>
+            <text x="130" y="124" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" fill="#7eb8e8" font-style="italic" id="wheel-line1">Biais</text>
+            <text x="130" y="140" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" fill="#7eb8e8" font-style="italic" id="wheel-line2">en IA</text>
+            <text x="130" y="154" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" fill="#6b7fa0" letter-spacing="1"></text>
+            <!-- Connecting lines -->
+            <line x1="130" y1="75" x2="130" y2="22" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+            <line x1="178" y1="158" x2="220" y2="200" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+            <line x1="82" y1="158" x2="40" y2="200" stroke="#10b981" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+            <!-- Dot top - data -->
+            <circle cx="130" cy="14" r="8" fill="#3b82f6" opacity="0.9"/>
+            <text x="130" y="4" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#60a5fa" id="wheel-data">DONNÉES</text>
+            <!-- Dot bottom right - model -->
+            <circle cx="228" cy="208" r="8" fill="#8b5cf6" opacity="0.9"/>
+            <text x="228" y="228" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#c4b5fd" id="wheel-model">MODÈLE</text>
+            <!-- Dot bottom left - human -->
+            <circle cx="32" cy="208" r="8" fill="#10b981" opacity="0.9"/>
+            <text x="32" y="228" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#6ee7b7" id="wheel-human">HUMAIN</text>
+          </svg>
+        </div>
+      </div>
+      <script>
+        function updateWheel(lang) {
+          const isEn = lang === "en";
+          const l1 = document.getElementById("wheel-line1");
+          const l2 = document.getElementById("wheel-line2");
+          const data = document.getElementById("wheel-data");
+          const model = document.getElementById("wheel-model");
+          const human = document.getElementById("wheel-human");
+          if (l1) l1.textContent = isEn ? "AI" : "Biais";
+          if (l2) l2.textContent = isEn ? "Bias" : "en IA";
+          if (data) data.textContent = isEn ? "DATA" : "DONNÉES";
+          if (model) model.textContent = isEn ? "MODEL" : "MODÈLE";
+          if (human) human.textContent = isEn ? "HUMAN" : "HUMAIN";
+        }
+        const _origSetLang = typeof setLang === "function" ? setLang : null;
+        document.addEventListener("DOMContentLoaded", () => {
+          const origSetLang = window.setLang;
+          window.setLang = function(lang) {
+            origSetLang(lang);
+            updateWheel(lang);
+          };
+          updateWheel("fr");
+        });
+  
+      // ---- SCREEN TOGGLE ----
+      function setScreen(mode) {
+        const btns = document.querySelectorAll(".screen-btn");
+        btns.forEach(b => b.classList.remove("active"));
+        event.target.classList.add("active");
+        document.body.className = "mode-" + mode;
+        // Always reset cycle so it recalculates with new dimensions
+        cycleInitialized = false;
+        document.getElementById("nodes-container").innerHTML = "";
+        if (arcAnimFrame) cancelAnimationFrame(arcAnimFrame);
+        if (document.getElementById("cycle-section").style.display !== "none") {
+          setTimeout(initCycle, 200);
+        }
+      }
+      document.body.classList.add("mode-desktop");
+    </script>
+
+      <!-- BIAS NOTE -->
+      <div style="max-width:700px;margin:0 auto 2rem;padding:0.85rem 1.2rem;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-left:3px solid #f59e0b;border-radius:0 10px 10px 0;display:flex;align-items:flex-start;gap:0.7rem;">
+        <span style="font-size:1rem;flex-shrink:0;">⚠️</span>
+        <span style="font-size:0.78rem;color:#6b7fa0;line-height:1.6;"
+          data-fr="&lt;strong style='color:#fcd34d;'&gt;Biais indésirable&lt;/strong&gt; - Un biais statistique ne signifie pas nécessairement un biais indésirable. Certains écarts de performance reflètent des réalités médicales légitimes et ne doivent pas être corrigés sans validation clinique."
+          data-en="&lt;strong style='color:#fcd34d;'&gt;Unwanted bias&lt;/strong&gt; - A statistical bias does not necessarily imply an unwanted bias. Some performance gaps reflect legitimate clinical realities and must not be corrected without medical validation.">
+          <strong style="color:#fcd34d;">Biais indésirable</strong> - Un biais statistique ne signifie pas nécessairement un biais indésirable. Certains écarts de performance reflètent des réalités médicales légitimes et ne doivent pas être corrigés sans validation clinique.
+        </span>
+      </div>
+
+      <div class="bias-cols">
+        <div class="bias-col">
+          <div class="bias-col-header" style="background: rgba(59, 130, 246, 0.06)">
+            <div>
+              <div class="bias-col-name" style="color: #60a5fa" data-fr="Biais données" data-en="Data bias">Biais données</div>
+              <div class="bias-col-en">Biais de données · ISO/IEC 24027</div>
+            </div>
+          </div>
+          <div class="bias-col-body">
+            <p class="bias-col-desc" data-fr="Biais issus des caractéristiques, de la distribution ou du traitement des données collectées." data-en="Biases arising from the characteristics, distribution or processing of collected data.">Biais issus des caractéristiques, de la distribution ou du traitement des données collectées.</p>
+            <div class="bias-tag-list">
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Représentation" data-en="Representation">Représentation</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Couverture" data-en="Coverage">Couverture</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Sélection" data-en="Selection">Sélection</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Qualité / Étiquettes manquantes" data-en="Quality / Missing labels">Qualité / Étiquettes manquantes</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Temporel / Dérive" data-en="Temporal / Drift">Temporel / Dérive</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Agrégation (Simpson)" data-en="Aggregation (Simpson)">Agrégation (Simpson)</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Confusion" data-en="Confounding">Confusion</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Prétraitement" data-en="Preprocessing">Prétraitement</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Échantillonnage" data-en="Sampling">Échantillonnage</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Non-réponse" data-en="Non-response">Non-réponse</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Étiquetage" data-en="Labelling">Étiquetage</span></div>
+              <div class="bias-tag" style="background: rgba(59, 130, 246, 0.06)"><span class="bias-dot" style="background: #3b82f6"></span><span data-fr="Entraînement distribué" data-en="Distributed training">Entraînement distribué</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="bias-col">
+          <div class="bias-col-header" style="background: rgba(139, 92, 246, 0.06)">
+            <div>
+              <div class="bias-col-name" style="color: #c4b5fd" data-fr="Biais modèle" data-en="Model bias">Biais modèle</div>
+              <div class="bias-col-en">Biais modèle · ISO/IEC 24027</div>
+            </div>
+          </div>
+          <div class="bias-col-body">
+            <p class="bias-col-desc" data-fr="Biais introduits par les choix algorithmiques, architecturaux et d'optimisation." data-en="Biases introduced by algorithmic, architectural and optimization choices.">Biais introduits par les choix algorithmiques, architecturaux et d'optimisation.</p>
+            <div class="bias-tag-list">
+              <div class="bias-tag" style="background: rgba(139, 92, 246, 0.06)"><span class="bias-dot" style="background: #8b5cf6"></span><span data-fr="Algorithmique" data-en="Algorithmic">Algorithmique</span></div>
+              <div class="bias-tag" style="background: rgba(139, 92, 246, 0.06)"><span class="bias-dot" style="background: #8b5cf6"></span><span data-fr="Expressivité" data-en="Expressiveness">Expressivité</span></div>
+              <div class="bias-tag" style="background: rgba(139, 92, 246, 0.06)"><span class="bias-dot" style="background: #8b5cf6"></span><span data-fr="Classe majoritaire" data-en="Majority class">Classe majoritaire</span></div>
+              <div class="bias-tag" style="background: rgba(139, 92, 246, 0.06)"><span class="bias-dot" style="background: #8b5cf6"></span><span data-fr="Informativité" data-en="Informativeness">Informativité</span></div>
+              <div class="bias-tag" style="background: rgba(139, 92, 246, 0.06)"><span class="bias-dot" style="background: #8b5cf6"></span><span data-fr="Feature engineering" data-en="Feature engineering">Feature engineering</span></div>
+              <div class="bias-tag" style="background: rgba(139, 92, 246, 0.06)"><span class="bias-dot" style="background: #8b5cf6"></span><span data-fr="Hyperparamètres" data-en="Hyperparameters">Hyperparamètres</span></div>
+              <div class="bias-tag" style="background: rgba(139, 92, 246, 0.06)"><span class="bias-dot" style="background: #8b5cf6"></span><span data-fr="Concept drift" data-en="Concept drift">Concept drift</span></div>
+              <div class="bias-tag" style="background: rgba(139, 92, 246, 0.06)"><span class="bias-dot" style="background: #8b5cf6"></span><span data-fr="Expressivité du modèle" data-en="Model expressiveness">Expressivité du modèle</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="bias-col">
+          <div class="bias-col-header" style="background: rgba(16, 185, 129, 0.06)">
+            <div>
+              <div class="bias-col-name" style="color: #6ee7b7" data-fr="Biais humains" data-en="Human biases">Biais humains</div>
+              <div class="bias-col-en">Biais humains · ISO/IEC 24027</div>
+            </div>
+          </div>
+          <div class="bias-col-body">
+            <p class="bias-col-desc" data-fr="Biais liés aux décisions, jugements ou pratiques des acteurs impliqués dans la conception et l'usage." data-en="Biases related to decisions, judgments or practices of actors involved in design and use.">Biais liés aux décisions, jugements ou pratiques des acteurs impliqués dans la conception et l'usage.</p>
+            <div class="bias-tag-list">
+              <div class="bias-tag" style="background: rgba(16, 185, 129, 0.06)"><span class="bias-dot" style="background: #10b981"></span><span data-fr="Automatisation" data-en="Automation">Automatisation</span></div>
+              <div class="bias-tag" style="background: rgba(16, 185, 129, 0.06)"><span class="bias-dot" style="background: #10b981"></span><span data-fr="Confirmation" data-en="Confirmation">Confirmation</span></div>
+              <div class="bias-tag" style="background: rgba(16, 185, 129, 0.06)"><span class="bias-dot" style="background: #10b981"></span><span data-fr="Attribution de groupe" data-en="Group attribution">Attribution de groupe</span></div>
+              <div class="bias-tag" style="background: rgba(16, 185, 129, 0.06)"><span class="bias-dot" style="background: #10b981"></span><span data-fr="Implicite" data-en="Implicit">Implicite</span></div>
+              <div class="bias-tag" style="background: rgba(16, 185, 129, 0.06)"><span class="bias-dot" style="background: #10b981"></span><span data-fr="Sociétal" data-en="Societal">Sociétal</span></div>
+              <div class="bias-tag" style="background: rgba(16, 185, 129, 0.06)"><span class="bias-dot" style="background: #10b981"></span><span data-fr="Cadrage" data-en="Framing">Cadrage</span></div>
+              <div class="bias-tag" style="background: rgba(16, 185, 129, 0.06)"><span class="bias-dot" style="background: #10b981"></span><span data-fr="Exigences" data-en="Requirements">Exigences</span></div>
+              <div class="bias-tag" style="background: rgba(16, 185, 129, 0.06)"><span class="bias-dot" style="background: #10b981"></span><span data-fr="Intra-groupe" data-en="In-group">Intra-groupe</span></div>
+              <div class="bias-tag" style="background: rgba(16, 185, 129, 0.06)"><span class="bias-dot" style="background: #10b981"></span><span data-fr="Homogénéité hors-groupe" data-en="Out-group homogeneity">Homogénéité hors-groupe</span></div>
+              <div class="bias-tag" style="background: rgba(16, 185, 129, 0.06)"><span class="bias-dot" style="background: #10b981"></span><span data-fr="Conception par règles" data-en="Rule-based design">Conception par règles</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+    </div>
+
+    <div id="cycle-section" style="display: none">
+      <style>
+        #cycle-section {
+          position: relative;
+          min-height: 100vh;
+          overflow: hidden;
+          background: var(--bg);
+        }
+        .cycle-bg {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          background: radial-gradient(
+            ellipse 70% 60% at 50% 50%,
+            rgba(59, 130, 246, 0.04) 0%,
+            transparent 70%
+          );
+        }
+        .cycle-bg::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background-image: linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+          background-size: 80px 80px;
+          mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 100%);
+        }
+        .cycle-orb { position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; animation: orbFloat 10s ease-in-out infinite; }
+        .cycle-orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%); top: -100px; left: -100px; animation-delay: 0s; }
+        .cycle-orb-2 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%); bottom: -100px; right: -100px; animation-delay: 4s; }
+        .cycle-orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%); top: 40%; left: 40%; animation-delay: 7s; }
+        .cycle-header { position: relative; z-index: 10; text-align: center; padding: 3rem 2rem 1.5rem; }
+        .cycle-header-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 100px; padding: 0.3rem 1rem; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #60a5fa; margin-bottom: 1rem; }
+        .cycle-header-title { font-family: "Playfair Display", serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 400; color: #7eb8e8; margin-bottom: 0.5rem; }
+        .cycle-header-sub { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.06em; }
+        .cycle-filters { position: relative; z-index: 10; display: flex; justify-content: center; gap: 0.4rem; flex-wrap: wrap; padding: 0 1rem 1.5rem; }
+        .cf-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.38rem 1rem; border-radius: 100px; font-size: 0.73rem; font-family: "Inter", sans-serif; font-weight: 500; cursor: pointer; transition: all 0.25s; letter-spacing: 0.03em; }
+        .cf-btn:hover, .cf-btn.active { background: var(--btn-color, var(--accent)); border-color: var(--btn-color, var(--accent)); color: #fff; box-shadow: 0 0 16px color-mix(in srgb, var(--btn-color, var(--accent)) 50%, transparent); }
+        .cycle-arena { position: relative; z-index: 10; width: 100%; max-width: 1100px; margin: 0 auto; height: 820px; }
+        .cycle-arena canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        .cnode { position: absolute; width: 200px; transform: translate(-50%, -50%); cursor: pointer; z-index: 20; transition: opacity 0.35s, transform 0.25s; }
+        .cnode.dimmed { opacity: 0.15; filter: brightness(0.15) saturate(0); transition: all 0.4s; }
+        .cnode.hidden { opacity: 0.15; filter: brightness(0.15) saturate(0); pointer-events: none; transition: all 0.4s; }
+        .cnode-inner { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 0.7rem 0.9rem; transition: border-color 0.3s, box-shadow 0.3s, transform 0.25s; position: relative; overflow: hidden; }
+        .cnode-inner::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--node-color, #3b82f6); transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
+        .cnode:hover .cnode-inner::before, .cnode.active .cnode-inner::before { transform: scaleX(1); }
+        .cnode:hover .cnode-inner, .cnode.active .cnode-inner { border-color: var(--node-color, #3b82f6); box-shadow: 0 0 24px color-mix(in srgb, var(--node-color, #3b82f6) 30%, transparent); transform: scale(1.04); }
+        .cnode-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; }
+        .cnode-num { width: 26px; height: 26px; border-radius: 50%; background: var(--node-color, #3b82f6); display: flex; align-items: center; justify-content: center; font-family: "Inter", sans-serif; font-size: 0.72rem; font-weight: 700; color: #fff; flex-shrink: 0; animation: nodeGlow 3s ease-in-out infinite; }
+        @keyframes nodeGlow { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--node-color, #3b82f6) 40%, transparent); } 50% { box-shadow: 0 0 12px 4px color-mix(in srgb, var(--node-color, #3b82f6) 25%, transparent); } }
+        .cnode-title { font-family: "Inter", sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--text); line-height: 1.2; }
+        .cnode-sub { font-size: 0.62rem; color: var(--muted); line-height: 1.4; }
+        .cnode-chips { display: flex; gap: 0.25rem; flex-wrap: wrap; margin-top: 0.4rem; }
+        .cnode-chip { font-size: 0.55rem; padding: 0.1rem 0.4rem; border-radius: 4px; background: rgba(255, 255, 255, 0.06); color: var(--muted); border: 1px solid var(--border); font-family: "Inter", sans-serif; letter-spacing: 0.03em; }
+        .cycle-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 15; text-align: center; pointer-events: none; }
+        .cycle-center-ring { width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.04) 60%, transparent 100%); border: 1px solid rgba(59, 130, 246, 0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; animation: centerPulse 4s ease-in-out infinite; position: relative; }
+        .cycle-center-ring::before { content: ""; position: absolute; inset: -8px; border-radius: 50%; border: 1px solid rgba(59, 130, 246, 0.08); animation: ringExpand 4s ease-in-out infinite; }
+        .cycle-center-ring::after { content: ""; position: absolute; inset: -18px; border-radius: 50%; border: 1px solid rgba(59, 130, 246, 0.04); animation: ringExpand 4s ease-in-out infinite; animation-delay: 0.5s; }
+        @keyframes centerPulse { 0%, 100% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.1); } 50% { box-shadow: 0 0 60px rgba(59, 130, 246, 0.2); } }
+        @keyframes ringExpand { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
+        .ccr-main { font-family: "Playfair Display", serif; font-size: 0.9rem; color: #7eb8e8; line-height: 1.2; font-weight: 400; }
+        .ccr-sub { font-family: "Inter", sans-serif; font-size: 0.58rem; color: var(--muted); letter-spacing: 0.08em; }
+        #cycle-panel { display: none; position: fixed; top: 0; right: 0; width: 380px; height: 100vh; background: var(--surface); border-left: 1px solid var(--border); z-index: 500; flex-direction: column; box-shadow: -12px 0 40px rgba(0, 0, 0, 0.6); animation: panelIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        #cycle-panel.open { display: flex; }
+        @keyframes panelIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .panel-bar { padding: 1.2rem 1.4rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 0.8rem; flex-shrink: 0; }
+        .panel-num-big { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Inter", sans-serif; font-weight: 700; font-size: 1rem; color: #fff; flex-shrink: 0; }
+        .panel-titles { flex: 1; }
+        .panel-title { font-family: "Playfair Display", serif; font-size: 1.05rem; font-weight: 400; }
+        .panel-subtitle { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+        .panel-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.1rem; padding: 0.2rem; transition: color 0.2s; flex-shrink: 0; }
+        .panel-close:hover { color: var(--text); }
+        .panel-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; overflow-x: auto; }
+        .ptab { background: none; border: none; color: var(--muted); padding: 0.65rem 0.9rem; font-family: "Inter", sans-serif; font-size: 0.68rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.06em; text-transform: uppercase; }
+        .ptab.active { color: var(--panel-color, #3b82f6); border-bottom-color: var(--panel-color, #3b82f6); }
+        .panel-body { flex: 1; overflow-y: auto; padding: 1.2rem 1.4rem; scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
+        .panel-body::-webkit-scrollbar { width: 4px; }
+        .panel-body::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+        .psec-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+        .psec-label::after { content: ""; flex: 1; height: 1px; background: rgba(255, 255, 255, 0.06); }
+        .pdesc { font-size: 0.8rem; color: var(--muted); line-height: 1.65; margin-bottom: 0.7rem; }
+        .ptags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.8rem; }
+        .ptag { padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.68rem; border: 1px solid; cursor: default; line-height: 1.4; font-family: "Inter", sans-serif; }
+        .ptag-action { background: var(--surface2); border-color: var(--border); color: var(--muted); }
+        .ptag-bias { background: rgba(167, 139, 250, 0.1); border-color: rgba(167, 139, 250, 0.25); color: #c4b5fd; cursor: pointer; transition: background 0.2s; }
+        .ptag-bias:hover { background: rgba(167, 139, 250, 0.2); }
+        .ptag-norm { background: rgba(251, 146, 60, 0.1); border-color: rgba(251, 146, 60, 0.25); color: #fdba74; }
+        .metric-card { background: rgba(52, 211, 153, 0.05); border: 1px solid rgba(52, 211, 153, 0.15); border-radius: 10px; padding: 0.75rem 0.9rem; margin-bottom: 0.5rem; }
+        .metric-card-name { font-size: 0.78rem; font-weight: 600; color: #6ee7b7; margin-bottom: 0.5rem; }
+        .metric-card-desc { font-size: 0.73rem; color: var(--muted); line-height: 1.5; margin-bottom: 0.5rem; }
+        .metric-card-meta { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid rgba(52, 211, 153, 0.1); }
+        .metric-meta-row { display: flex; align-items: flex-start; gap: 0.4rem; font-size: 0.68rem; line-height: 1.4; }
+        .metric-meta-label { color: #34d399; font-weight: 600; min-width: 52px; flex-shrink: 0; }
+        .metric-meta-value { color: var(--muted); }
+        .metric-threshold { color: #fb923c; }
+        .metric-plain { margin-top: 0.5rem; padding: 0.5rem 0.7rem; background: rgba(59,130,246,0.06); border-left: 2px solid #3b82f6; border-radius: 0 6px 6px 0; font-size: 0.72rem; color: #93c5fd; line-height: 1.5; font-style: italic; }
+        .metric-plain-label { font-weight: 700; font-style: normal; color: #60a5fa; margin-right: 0.3rem; }
+        .metric-plain { margin-top: 0.5rem; padding: 0.5rem 0.7rem; background: rgba(59,130,246,0.06); border-left: 2px solid #3b82f6; border-radius: 0 6px 6px 0; font-size: 0.72rem; color: #93c5fd; line-height: 1.5; font-style: italic; }
+        .metric-plain-label { font-style: normal; font-weight: 700; color: #60a5fa; display: block; margin-bottom: 0.15rem; font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase; }
+        .metric-clinical { margin-top: 0.5rem; padding: 0.5rem 0.7rem; background: rgba(59,130,246,0.06); border-left: 2px solid #3b82f6; border-radius: 0 6px 6px 0; font-size: 0.72rem; color: #93c5fd; line-height: 1.5; font-style: italic; }
+        .metric-clinical-label { font-style: normal; font-weight: 700; color: #60a5fa; margin-right: 0.3rem; }
+        .metric-plain { margin-top: 0.5rem; padding: 0.5rem 0.7rem; background: rgba(255,255,255,0.03); border-left: 2px solid rgba(52,211,153,0.3); border-radius: 0 6px 6px 0; font-size: 0.72rem; color: #f0f4ff; line-height: 1.5; font-style: italic; }
+        .metric-plain-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399; margin-bottom: 0.25rem; font-style: normal; }
+        .mitig-card { background: rgba(251, 146, 60, 0.05); border: 1px solid rgba(251, 146, 60, 0.15); border-radius: 10px; padding: 0.75rem 0.9rem; margin-bottom: 0.5rem; }
+        .mitig-card-phase { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: rgba(251, 146, 60, 0.7); margin-bottom: 0.2rem; }
+        .mitig-card-name { font-size: 0.78rem; font-weight: 600; color: #fb923c; margin-bottom: 0.2rem; }
+        .mitig-card-desc { font-size: 0.73rem; color: var(--muted); line-height: 1.5; }
+        .mitig-supervision { margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid rgba(251,146,60,0.15); display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        .mitig-col { padding: 0.45rem 0.6rem; border-radius: 6px; }
+        .mitig-col-system { background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.15); }
+        .mitig-col-human { background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); }
+        .mitig-col-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.25rem; }
+        .mitig-col-system .mitig-col-label { color: #60a5fa; }
+        .mitig-col-human .mitig-col-label { color: #34d399; }
+        .mitig-col-text { font-size: 0.68rem; color: var(--muted); line-height: 1.4; }
+        .mitig-banner { margin-bottom: 0.8rem; padding: 0.65rem 0.9rem; background: rgba(245,158,11,0.08); border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0; font-size: 0.73rem; color: #fcd34d; line-height: 1.5; display: flex; align-items: flex-start; gap: 0.5rem; }
+        .los-box { background: rgba(251, 146, 60, 0.07); border-left: 3px solid #fb923c; border-radius: 0 8px 8px 0; padding: 0.75rem 0.9rem; margin-bottom: 0.8rem; }
+        .los-box-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fb923c; margin-bottom: 0.3rem; }
+        .los-box-text { font-size: 0.76rem; color: var(--muted); line-height: 1.6; }
+        #bias-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 600; background: var(--surface2); border: 1px solid rgba(167, 139, 250, 0.3); border-radius: 16px; padding: 1.5rem; max-width: 440px; width: 90vw; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7); animation: popIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        #bias-modal.open { display: block; }
+        @keyframes popIn { from { transform: translate(-50%, -48%) scale(0.9); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+        .bm-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+        .bm-title { font-family: "Playfair Display", serif; font-size: 1rem; color: #c4b5fd; flex: 1; padding-right: 0.8rem; }
+        .bm-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.1rem; }
+        .bm-close:hover { color: var(--text); }
+        .bm-en { font-family: "Inter", sans-serif; font-size: 0.65rem; color: rgba(167, 139, 250, 0.6); margin-bottom: 0.7rem; font-style: italic; }
+        .bm-body { font-size: 0.8rem; color: var(--muted); line-height: 1.65; }
+        .bm-example { margin-top: 0.8rem; padding: 0.65rem 0.85rem; background: rgba(251, 146, 60, 0.08); border-left: 3px solid #fb923c; border-radius: 0 8px 8px 0; font-size: 0.75rem; color: rgba(251, 146, 60, 0.8); font-style: italic; line-height: 1.5; }
+        #panel-overlay { display: none; position: fixed; inset: 0; z-index: 499; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(2px); }
+        #panel-overlay.open { display: block; }
+        #bias-overlay { display: none; position: fixed; inset: 0; z-index: 599; background: rgba(0, 0, 0, 0.6); }
+        #bias-overlay.open { display: block; }
+        .cycle-legend { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; padding: 0.8rem 1rem; margin: 0 auto 1rem; max-width: 700px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; font-size: 0.7rem; color: var(--muted); position: relative; z-index: 10; width: calc(100% - 2rem); }
+        .leg-item { display: flex; align-items: center; gap: 0.4rem; }
+        .leg-dot { width: 8px; height: 8px; border-radius: 50%; }
+        #particle-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+      </style>
+
+      <div class="cycle-bg">
+        <div class="cycle-orb cycle-orb-1"></div>
+        <div class="cycle-orb cycle-orb-2"></div>
+        <div class="cycle-orb cycle-orb-3"></div>
+      </div>
+
+      <div class="cycle-header">
+        <div class="cycle-header-eyebrow" data-fr="ISO/IEC 22989 · 24027" data-en="ISO/IEC 22989 · 24027">ISO/IEC 22989 · 24027</div>
+        <div class="cycle-header-title" data-fr="Cycle de vie de l'IA - Fiable & Équitable" data-en="AI Lifecycle - Trustworthy & Fair">Cycle de vie de l'IA - Fiable &amp; Équitable</div>
+        <div class="cycle-header-sub" data-fr="Cliquez une étape pour le panneau complet · Les biais sont cliquables" data-en="Click a step for the full panel · Biases are clickable">Cliquez une étape pour le panneau complet · Les biais sont cliquables</div>
+      </div>
+
+      <div class="cycle-filters">
+        <button class="cf-btn active" data-risk="all" data-fr="Toutes les étapes" data-en="All steps">Toutes les étapes</button>
+        <button class="cf-btn" data-risk="high" style="--btn-color: #ef4444" data-fr="Risque élevé" data-en="High risk">Risque élevé</button>
+        <button class="cf-btn" data-risk="medium" style="--btn-color: #f59e0b" data-fr="Risque modéré" data-en="Moderate risk">Risque modéré</button>
+      </div>
+
+      <div class="cycle-arena" id="cycleArena">
+        <canvas id="particle-canvas"></canvas>
+        <canvas id="arc-canvas"></canvas>
+        <div id="nodes-container"></div>
+        <div class="cycle-center">
+          <div class="cycle-center-ring">
+            <div class="ccr-main" data-fr="Cycle de vie IA" data-en="AI Lifecycle">Cycle de vie IA</div>
+            <div class="ccr-sub">ISO/IEC 22989</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cycle-legend">
+        <div class="leg-item"><div class="leg-dot" style="background: #a78bfa"></div><span data-fr="Biais" data-en=" Bias">Biais</span></div>
+        <div class="leg-item"><div class="leg-dot" style="background: #34d399"></div><span data-fr="Métriques équité" data-en="Fairness metrics">Métriques équité</span></div>
+        <div class="leg-item"><div class="leg-dot" style="background: #fb923c"></div><span data-fr="Exemple LOS" data-en="LOS example">Exemple LOS</span></div>
+        <div class="leg-item"><div class="leg-dot" style="background: #6b7fa0"></div><span data-fr="Cliquer → panneau" data-en="Click → panel">Cliquer → panneau</span></div>
+      </div>
+
+      <div id="panel-overlay"></div>
+      <div id="cycle-panel">
+        <div class="panel-bar" id="panel-bar">
+          <div class="panel-num-big" id="panel-num">1</div>
+          <div class="panel-titles">
+            <div class="panel-title" id="panel-title"></div>
+            <div class="panel-subtitle" id="panel-subtitle"></div>
+          </div>
+          <button class="panel-close" id="panel-close">✕</button>
+        </div>
+        <div class="panel-tabs" id="panel-tabs"></div>
+        <div class="panel-body" id="panel-body"></div>
+      </div>
+
+      <div id="bias-overlay"></div>
+      <div id="bias-modal">
+        <div class="bm-head">
+          <div class="bm-title" id="bm-title"></div>
+          <button class="bm-close" id="bm-close">✕</button>
+        </div>
+        <div class="bm-en" id="bm-en"></div>
+        <div class="bm-body" id="bm-body"></div>
+        <div class="bm-example" id="bm-example"></div>
+      </div>
+    </div>
+
+    <script>
+      let currentLang = "fr", activeCycle = null, activePanelTab = "overview";
+      function t(o) { return typeof o === "string" ? o : o[currentLang] || o.fr || ""; }
+      function setLang(lang) {
+        currentLang = lang;
+        document.querySelectorAll(".lang-btn").forEach((b) => b.classList.toggle("active", b.dataset.lang === lang));
+        applyLang();
+        refreshCycleNodes();
+        if (activeCycle) { openPanelForCycle(activeCycle, false); renderPanelContent(activeCycle, activePanelTab); }
+      }
+      function applyLang() {
+        const a = `data-${currentLang}`;
+        document.querySelectorAll(`[${a}]`).forEach((el) => { el.innerHTML = el.getAttribute(a); });
+      }
+      document.querySelectorAll(".nav-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".nav-tab").forEach((t) => t.classList.remove("on"));
+          tab.classList.add("on");
+          const tg = tab.dataset.section;
+          document.getElementById("hero-section").style.display = tg === "hero-section" ? "flex" : "none";
+          document.getElementById("intro-section").style.display = tg === "intro-section" ? "block" : "none";
+          document.getElementById("cycle-section").style.display = tg === "cycle-section" ? "block" : "none";
+          if (tg === "cycle-section") setTimeout(initCycle, 50);
+        });
+      });
+      document.getElementById("hero-section").style.display = "flex";
+      document.getElementById("hero-section").style.flexDirection = "column";
+
+      const CYCLES = [
+        { id: 1, hex: "#3b82f6", title: { fr: "Initialisation", en: "Inception" }, sub: { fr: "Objectifs, exigences, appréciation du risque", en: "Objectives, requirements, risk assessment" }, tags: ["biais", "metriques", "mitigation"], desc: { fr: "Définir la finalité du système, le contexte opérationnel, les limites et hypothèses. C'est ici que commencent les biais de cadrage, de confirmation et d'exigences.", en: "Define the system purpose, operational context, limits and assumptions. This is where framing, confirmation and requirements biases begin." }, actions: { fr: ["Définir le problème de santé et le besoin clinique", "Spécifier les exigences fonctionnelles et non fonctionnelles", "Identifier les contraintes éthiques, légales et réglementaires", "Réaliser une analyse d'impact initiale (analyse d'impact algorithmique)", "Définir le plan de gestion des risques"], en: ["Define the health problem and clinical need", "Specify functional and non-functional requirements", "Identify ethical, legal and regulatory constraints", "Conduct an initial impact assessment (analyse d'impact algorithmique)", "Define the risk management plan"] }, biais: ["biais-confirmation", "biais-implicite", "biais-societal", "biais-exigences", "biais-regles", "biais-intragroupe"], normes: ["AI Act UE"], metriques: { fr: [
+  { name: "Diversité de l'équipe projet", desc: "L'équipe inclut-elle des cliniciens, des ingénieurs ET des éthiciens ?", threshold: "Alerte si aucun clinicien dans l'équipe", plain: "Un modèle conçu sans médecin risque de passer à côté de réalités médicales importantes." },
+  { name: "Sous-groupes couverts dans les exigences", desc: "Tous les types de patients visés sont-ils mentionnés dans le cahier des charges ?", threshold: "Alerte si certains services ou spécialités sont absents", plain: "Si on ne mentionne pas les patients ORL dès le départ, on ne vérifiera jamais si le modèle marche pour eux." },
+  { name: "Niveau de risque éthique (EU AI Act)", desc: "Classification du système selon la réglementation européenne : minimal, limité, élevé ou inacceptable.", threshold: "Tout modèle LOS en hôpital = risque élevé → audit obligatoire", plain: "La loi européenne impose un audit indépendant avant de déployer un modèle IA dans un hôpital." }
+], en: [
+  { name: "Project team diversity", desc: "Does the team include clinicians, engineers AND ethicists?", threshold: "Alert if no clinician in the team", plain: "A model designed without a doctor risks missing important medical realities." },
+  { name: "Subgroups covered in requirements", desc: "Are all targeted patient types mentioned in the specifications?", threshold: "Alert if some wards or specialties are absent", plain: "If ENT patients are not mentioned from the start, no one will ever check if the model works for them." },
+  { name: "Ethical risk level (EU AI Act)", desc: "System classification under European regulation: minimal, limited, high or unacceptable.", threshold: "Any LOS model in hospital = high risk → mandatory audit", plain: "European law requires an independent audit before deploying an AI model in a hospital." }
+] }, mitigation: { fr: [{ name: "Implication multidisciplinaire", phase: "Pré-traitement", desc: "Cliniciens, éthiciens, statisticiens et informaticiens dès la définition du problème." }, { name: "Revue éthique formelle", phase: "Pré-traitement", desc: "Soumettre la conception à un comité d'éthique indépendant avant le développement." }, { name: "Checklist biais cognitifs", phase: "Pré-traitement", desc: "Taxonomie des biais humains comme guide de revue des hypothèses de design." }], en: [{ name: "Multidisciplinary involvement", phase: "Pre-processing", desc: "Clinicians, ethicists, statisticians and engineers from problem definition." }, { name: "Formal ethics review", phase: "Pre-processing", desc: "Submit the design to an independent ethics committee before development." }, { name: "Cognitive bias checklist", phase: "Pre-processing", desc: " human bias taxonomy as a design assumption review guide." }] }, los: { fr: "Définir que le modèle prédit la durée de séjour pour les patients hospitalisés adultes dans un hôpital de soins aigus - exclure pédiatries et soins psychiatriques.", en: "Define that the model predicts length of stay for adult inpatients in an acute care hospital - explicitly exclude paediatrics and psychiatric care." } },
+        { id: 2, hex: "#10b981", title: { fr: "Conception et développement", en: "Design and development" }, sub: { fr: "Approche, architecture, code, données", en: "Approach, architecture, code, data" }, tags: ["biais", "metriques", "mitigation"], desc: { fr: "Phase critique : la majorité des biais s'introduisent ici. De la collecte des données jusqu'à l'entraînement complet du modèle.", en: "Critical phase: most biases are introduced here. From data collection through to full model training." }, actions: { fr: ["Collecter les données (dossier médical électronique, imagerie, biologie…)", "Gérer les données manquantes (imputation adaptée)", "Anonymiser / pseudonymiser (protection des données personnelles)", "Séparer train / validation / test", "Nettoyer, encoder, normaliser et transformer", "Sélectionner algorithmes et architectures", "Entraîner le modèle et régler les hyperparamètres"], en: ["Collect data (dossier médical électronique, imaging, biology…)", "Handle missing data (appropriate imputation)", "Anonymise / pseudonymise (GDPR)", "Split train / validation / test", "Clean, encode, normalise and transform", "Select algorithms and architectures", "Train the model and tune hyperparameters"] }, biais: ["biais-representation", "biais-qualite", "biais-selection", "biais-echantillonnage", "biais-couverture", "biais-non-reponse", "biais-etiquetage", "biais-temporel", "biais-pretraitement", "biais-aggregation", "biais-distribution", "biais-entrain-distribue", "biais-classe-majoritaire", "biais-algorithme", "biais-hyperparametres"], normes: ["protection des données personnelles"], metriques: { fr: [
+  { name: "Erreur de prédiction par groupe (MAE)", desc: "De combien de jours le modèle se trompe-t-il en moyenne, pour chaque service ou spécialité ?", threshold: "Alerte si l'erreur d'un groupe est 2× supérieure à l'erreur globale", plain: "Si le modèle se trompe de 2 jours en moyenne mais de 6 jours pour les patients ORL, ces patients sont défavorisés." },
+  { name: "Données manquantes par service", desc: "Quel pourcentage de données est absent pour chaque service ou spécialité ?", threshold: "Alerte si > 30% de données manquantes pour un groupe", plain: "Si 40% des dossiers ORL n'ont pas de diagnostic renseigné, le modèle apprend sur des données incomplètes et sera moins fiable pour ces patients." },
+  { name: "Répartition des patients par service", desc: "Certains services sont-ils sur ou sous-représentés dans les données d'entraînement ?", threshold: "Alerte si un service représente > 35% ou < 2% des données", plain: "La médecine interne représente 37% des données - le modèle apprend surtout ses patterns et sera moins bon pour les autres services." }
+], en: [
+  { name: "Prediction error per group (MAE)", desc: "By how many days does the model err on average, for each ward or specialty?", threshold: "Alert if a group's error is 2× above the global error", plain: "If the model errs by 2 days on average but by 6 days for ENT patients, those patients are disadvantaged." },
+  { name: "Missing data per ward", desc: "What percentage of data is missing for each ward or specialty?", threshold: "Alert if > 30% missing data for a group", plain: "If 40% of ENT records have no diagnosis, the model learns on incomplete data and will be less reliable for these patients." },
+  { name: "Patient distribution by ward", desc: "Are some wards over or under-represented in the training data?", threshold: "Alert if a ward represents > 35% or < 2% of data", plain: "Internal medicine represents 37% of the data - the model mainly learns its patterns and will perform worse on other wards." }
+] }, mitigation: { fr: [{ name: "Audit qualité systématique", phase: "Pré-traitement", desc: "Vérifier complétude, cohérence et distribution avant tout entraînement." }, { name: "Rééchantillonnage rééchantillonnage des groupes rares / class weights", phase: "Entraînement", desc: "Techniques rééchantillonnage des groupes rares, under-sampling ou pondération pour équilibrer la distribution." }, { name: "Contraintes d'équité (avec contrainte d'équité)", phase: "Entraînement", desc: "Intégrer des contraintes de parité démographique (écart de performance entre groupes) dans la fonction d'optimisation." }], en: [{ name: "Systematic quality audit", phase: "Pre-processing", desc: "Verify completeness, consistency and distribution before any training." }, { name: "rééchantillonnage des groupes rares resampling / class weights", phase: "Training", desc: "rééchantillonnage des groupes rares, under-sampling or class weighting techniques to balance the distribution." }, { name: "Fairness-aware constraints", phase: "Training", desc: "Integrate demographic parity (écart de performance entre groupes) constraints into the optimisation function." }] }, los: { fr: "Jeu de données : 15,7% valeurs manquantes ICD/type diagnostic. 2 erreurs de dates. Distribution très asymétrique (médiane 7,63j, max 462j). Dominance médecine interne (~37%).", en: "Dataset: 15.7% missing values for ICD/diagnosis type. 2 date errors. Highly skewed distribution (median 7.63d, max 462d). Internal medicine dominance (~37%)." } },
+        { id: 3, hex: "#f59e0b", title: { fr: "Vérification et validation", en: "Verification and validation" }, sub: { fr: "Données d'essai, vérification, examen du risque", en: "Test data, system verification, risk review" }, tags: ["biais", "metriques", "mitigation"], desc: { fr: "Vérification = système correctement construit. Validation = adéquation à l'usage réel. Les critères d'acceptation doivent être prédéfinis par sous-groupe.", en: "Verification = system correctly built to spec. Validation = fitness for real-world use. Acceptance criteria must be pre-defined per subgroup." }, actions: { fr: ["Évaluer les performances globales du modèle", "Analyser l'équité (fairness) par sous-groupes", "Évaluer explicabilité et interprétabilité (outils d'explication)", "Réaliser la validation clinique et réglementaire", "Définir des critères d'acceptation par sous-groupe"], en: ["Evaluate overall model performance", "Analyse fairness by subgroup", "Evaluate explainability and interpretability (outils d'explication)", "Conduct clinical and regulatory validation", "Define acceptance criteria per subgroup"] }, biais: ["biais-classe-majoritaire", "biais-informativite", "biais-confusion", "biais-expressivite", "biais-attribution-groupe"], metriques: { fr: [
+  { name: "Écart de performance entre groupes (MAE_gap)", desc: "Différence entre la meilleure et la pire prédiction selon le service ou la spécialité.", threshold: "Alerte si écart > 0.3 · Blocage déploiement si > 0.5", plain: "Dans nos données, le Service atteint un écart de 0.77 - certains services reçoivent des prédictions beaucoup moins fiables que d'autres." },
+  { name: "Cohérence des prédictions (Kappa de Cohen)", desc: "Le modèle est-il fiable de la même manière pour tous les groupes ?", threshold: "Alerte si écart de Kappa > 0.3 entre groupes", plain: "Un Kappa proche de 0 signifie que le modèle prédit aussi bien que le hasard. Si c'est le cas pour un service, ses patients ne bénéficient pas vraiment du modèle." },
+  { name: "Variables importantes par groupe (analyse des variables importantes)", desc: "Est-ce que le modèle utilise les mêmes critères pour tous les patients ?", threshold: "Alerte si les 3 variables principales diffèrent entre groupes", plain: "Si le modèle utilise des critères différents selon le service pour expliquer la durée de séjour, les explications données aux cliniciens ne sont pas cohérentes." }
+], en: [
+  { name: "Performance gap between groups (MAE_gap)", desc: "Difference between the best and worst prediction by ward or specialty.", threshold: "Alert if gap > 0.3 · Deployment blocked if > 0.5", plain: "In our data, the Service variable reaches a gap of 0.77 - some wards receive much less reliable predictions than others." },
+  { name: "Prediction consistency (Cohen's Kappa)", desc: "Is the model equally reliable for all groups?", threshold: "Alert if Kappa gap > 0.3 between groups", plain: "A Kappa close to 0 means the model predicts as well as chance. If that's the case for a ward, its patients don't really benefit from the model." },
+  { name: "Important variables per group (analyse des variables importantes)", desc: "Does the model use the same criteria for all patients?", threshold: "Alert if the top 3 variables differ between groups", plain: "If the model uses different criteria per ward to explain length of stay, the explanations given to clinicians are not consistent." }
+] }, mitigation: { fr: [{ name: "Jeux de test externes indépendants", phase: "Post-traitement", desc: "Données d'un établissement non représenté dans l'entraînement." }, { name: "Validation croisée stratifiée", phase: "Post-traitement", desc: "Chaque pli représentatif de la distribution des sous-groupes." }, { name: "Revue clinique indépendante", phase: "Post-traitement", desc: "Valider par des cliniciens n'ayant pas participé au développement." }], en: [{ name: "Independent external test sets", phase: "Post-processing", desc: "Data from a site not represented in training." }, { name: "Stratified validation croisée", phase: "Post-processing", desc: "Each fold representative of subgroup distribution." }, { name: "Independent clinical review", phase: "Post-processing", desc: "Validate with clinicians who did not participate in development." }] }, los: { fr: "Le modèle XGBoost est globalement performant mais moins équitable pour les patients âgés, certaines spécialités (ORL) et les longues durées de séjour.", en: "The XGBoost model is globally performant but less fair for elderly patients, certain specialties (ENT) and long lengths of stay." } },
+        { id: 4, hex: "#8b5cf6", title: { fr: "Déploiement", en: "Deployment" }, sub: { fr: "Déploiement du moteur d'exécution et du modèle", en: "Deployment of runtime and model" }, tags: ["biais", "metriques", "mitigation"], desc: { fr: "Transition maîtrisée vers la production. Intégration au système informatique hospitalier, formation des utilisateurs aux biais, consentement patients, déploiement progressif.", en: "Controlled transition to production. HIS integration, user bias training, patient consent, progressive rollout." }, actions: { fr: ["Intégrer dans le système d'information hospitalier (système informatique hospitalier)", "Tester en environnement pré-production réel", "Former les utilisateurs aux biais et limitations", "Informer les patients et recueillir le consentement (protection des données personnelles)", "Déployer progressivement (pilote → complet)", "Définir les modalités de supervision humaine"], en: ["Integrate into the Hospital Information System (HIS)", "Test in real pre-production environment", "Train users on biases and limitations", "Inform patients and collect consent (GDPR)", "Deploy progressively (pilot → full)", "Define human supervision modalities"] }, biais: ["biais-automatisation", "biais-usage", "biais-implicite", "biais-horsgroupe", "biais-attribution-groupe"], normes: ["protection des données personnelles", "AI Act UE"], metriques: { fr: [
+  { name: "Taux d'acceptation des recommandations", desc: "Quelle proportion des prédictions LOS est acceptée sans modification par le clinicien ?", threshold: "Alerte si > 95% · Cible recommandée : 70-85%", plain: "Si le médecin accepte toujours la prédiction sans la questionner, il n'est plus vraiment un superviseur. C'est le signe d'un biais d'automatisation." },
+  { name: "Fréquence des corrections clinicien", desc: "Combien de fois le clinicien corrige-t-il la prédiction du modèle, et pourquoi ?", threshold: "Alerte si < 5% de corrections - trop peu de remises en question", plain: "Chaque correction d'un médecin est une information précieuse. Ces cas doivent être enregistrés pour améliorer le modèle." },
+  { name: "Niveau de formation aux biais IA", desc: "Le personnel utilisant le modèle connaît-il ses limites et ses zones d'incertitude ?", threshold: "Alerte si score de formation < 70%", plain: "Un clinicien qui ne connaît pas les limites du modèle ne saura pas quand il faut le remettre en question - ce qui met les patients à risque." }
+], en: [
+  { name: "Recommendation acceptance rate", desc: "What proportion of LOS predictions is accepted without modification by the clinician?", threshold: "Alert if > 95% · Recommended target: 70-85%", plain: "If the doctor always accepts the prediction without questioning it, they are no longer a real supervisor. This is a sign of automation bias." },
+  { name: "Clinician correction frequency", desc: "How often does the clinician correct the model prediction, and why?", threshold: "Alert if < 5% corrections - too little questioning", plain: "Each doctor correction is valuable information. These cases must be logged to improve the model." },
+  { name: "AI bias training level", desc: "Does the staff using the model know its limitations and uncertainty zones?", threshold: "Alert if training score < 70%", plain: "A clinician who doesn't know the model's limits won't know when to question it - which puts patients at risk." }
+] }, mitigation: { fr: [{ name: "Interface explicable avec niveau de confiance", phase: "Post-traitement", desc: "Afficher la prédiction avec intervalle de confiance et 3 variables analyse des variables importantes clés." }, { name: "Garde-fous automatiques", phase: "Post-traitement", desc: "Flaguer comme incertaine toute prédiction sous un seuil de confiance." }, { name: "Human-in-the-loop obligatoire", phase: "Post-traitement", desc: "La décision finale reste humaine. Documenter toutes les divergences." }], en: [{ name: "Explainable interface with confidence level", phase: "Post-processing", desc: "Display prediction with confidence interval and top 3 analyse des variables importantes features." }, { name: "Automatic guardrails", phase: "Post-processing", desc: "Flag any prediction below a minimum confidence threshold as uncertain." }, { name: "Mandatory human-in-the-loop", phase: "Post-processing", desc: "Final decision stays human. Document all clinician/model divergences." }] }, los: { fr: "Lors du déploiement dans un nouveau service, vérifier que les distributions de LOS correspondent aux données d'entraînement (test de comparaison des distributions).", en: "When deploying in a new ward, verify that LOS distributions match training data (test statistique de comparaison)." } },
+        { id: 5, hex: "#ec4899", title: { fr: "Exploitation et suivi", en: "Operation and monitoring" }, sub: { fr: "Exécution du modèle, mise à jour, management du risque", en: "Model execution, update, risk management" }, tags: ["biais", "metriques", "mitigation"], desc: { fr: "Les systèmes d'IA modifient leur comportement avec le temps. Surveillance continue des performances et de l'équité par sous-groupes.", en: "AI systems change behaviour over time. Continuous monitoring of performance and fairness by subgroup." }, actions: { fr: ["Surveiller les performances en production (surveillance du modèle en production)", "Détecter les dérives des données et du modèle", "Surveiller les biais par sous-groupes en continu", "Déclencher le réentraînement si nécessaire", "Intégrer aux processus qualité (plan d'action correctif, rapport de non-conformité)"], en: ["Monitor production performance (surveillance du modèle en production)", "Detect data and model drift", "Continuously monitor bias by subgroup", "Trigger retraining if needed", "Integrate into quality processes (plan d'action correctif, rapport de non-conformité)"] }, biais: ["biais-derive", "biais-temporel", "biais-automatisation", "biais-entrain-distribue"], metriques: { fr: [
+  { name: "Dérive des données (KL Divergence)", desc: "Les patients actuels ressemblent-ils encore aux patients sur lesquels le modèle a été entraîné ?", threshold: "Alerte si dérive > 0.1 · Réentraînement urgent si > 0.3", plain: "Après le COVID-19, les patterns d'hospitalisation ont changé. Un modèle de 2019 peut être devenu inadapté sans que personne ne s'en rende compte." },
+  { name: "Évolution de l'équité en production", desc: "L'écart de performance entre groupes augmente-t-il avec le temps ?", threshold: "Alerte si l'écart augmente de plus de 0.1 par rapport au départ", plain: "L'équité du modèle peut se dégrader progressivement. Cette métrique permet de détecter le problème avant que les patients en subissent les conséquences." },
+  { name: "Incidents liés aux prédictions", desc: "Combien de fois une prédiction LOS a-t-elle conduit à une décision clinique problématique ?", threshold: "Alerte si > 2 incidents graves par mois", plain: "Si une mauvaise prédiction a causé un problème pour un patient, cela doit être enregistré. Sans traçabilité, le même problème se reproduira." }
+], en: [
+  { name: "Data drift (KL Divergence)", desc: "Do current patients still resemble those the model was trained on?", threshold: "Alert if drift > 0.1 · Urgent retraining if > 0.3", plain: "After COVID-19, hospitalisation patterns changed. A 2019 model may have become unsuitable without anyone noticing." },
+  { name: "Fairness evolution in production", desc: "Is the performance gap between groups increasing over time?", threshold: "Alert if gap increases by more than 0.1 from baseline", plain: "Model fairness can degrade progressively. This metric detects the problem before patients suffer the consequences." },
+  { name: "Prediction-related incidents", desc: "How many times has a LOS prediction led to a problematic clinical decision?", threshold: "Alert if > 2 serious incidents per month", plain: "If a wrong prediction caused a problem for a patient, it must be logged. Without traceability, the same problem will happen again." }
+] }, mitigation: { fr: [{ name: "Monitoring fairness automatisé", phase: "Post-traitement", desc: "Surveiller écart de performance entre groupes et écart d'équité des chances par sous-groupe à chaque nouveau lot de données." }, { name: "Détection de dérive (détection automatique de changement, KL)", phase: "Post-traitement", desc: "KL divergence > 0,1 = alerte." }, { name: "Réentraînement périodique planifié", phase: "Post-traitement", desc: "Obligatoire après événements majeurs (COVID-19, changement de protocole)." }], en: [{ name: "Automated fairness monitoring", phase: "Post-processing", desc: "Monitor écart de performance entre groupes and écart d'équité des chances per subgroup on each new data batch." }, { name: "Drift detection (détection automatique de changement, KL)", phase: "Post-processing", desc: "KL divergence > 0.1 = alert." }, { name: "Planned periodic retraining", phase: "Post-processing", desc: "Mandatory after major events (COVID-19, protocol changes)." }] }, los: { fr: "Après COVID-19, le LOS médian a augmenté pour certains services. Un monitoring KL Divergence aurait déclenché une alerte dès les premières semaines.", en: "After COVID-19, median LOS increased in certain wards. KL Divergence monitoring would have triggered an alert within the first weeks." } },
+        { id: 6, hex: "#06b6d4", title: { fr: "Ré-évaluer", en: "Re-evaluate" }, sub: { fr: "Affiner les objectifs, exigences, surveillance du risque", en: "Refine objectives, requirements, risk monitoring" }, tags: ["biais", "metriques", "mitigation"], desc: { fr: "Corriger les biais résiduels et injustices persistantes après déploiement. Calibration après entraînement, seuils différenciés, égalisation des chances.", en: "Correcting residual biases and persistent unfairness after deployment. Post-hoc calibration, differentiated thresholds, égalisation des chances." }, actions: { fr: ["Recalibrer le modèle par groupe si nécessaire", "Définir des seuils de décision spécifiques par sous-groupe", "Appliquer des méthodes post-traitement (égalisation des chances)", "Réévaluer l'équité et la performance globale après corrections", "Documenter les corrections et leur impact"], en: ["Recalibrate the model per group if needed", "Define specific decision thresholds per subgroup", "Apply post-processing methods (égalisation des chances)", "Re-evaluate fairness and global performance after corrections", "Document corrections and their impact"] }, biais: ["biais-classe-majoritaire", "biais-informativite"], metriques: { fr: [
+  { name: "Amélioration de l'équité après correction", desc: "L'écart de performance entre groupes a-t-il diminué après la mitigation ?", threshold: "Alerte si réduction < 20% après correction", plain: "On ne peut pas affirmer avoir amélioré l'équité sans mesurer avant et après. C'est la preuve concrète que la correction a fonctionné." },
+  { name: "Impact sur la précision globale", desc: "La correction du biais a-t-elle dégradé la performance générale du modèle ?", threshold: "Acceptable si dégradation < 10% de l'erreur globale", plain: "Corriger un biais peut réduire la précision globale. Il faut trouver le bon équilibre entre équité et performance." },
+  { name: "Équité par groupe avant et après", desc: "L'amélioration pour un groupe ne dégrade-t-elle pas un autre groupe ?", threshold: "Alerte si un groupe se dégrade de plus de 0.05 après correction", plain: "Quand on corrige un biais, on vérifie que tous les groupes en bénéficient - pas seulement celui qu'on ciblait." }
+], en: [
+  { name: "Fairness improvement after correction", desc: "Has the performance gap between groups decreased after mitigation?", threshold: "Alert if reduction < 20% after correction", plain: "You cannot claim to have improved fairness without measuring before and after. This is the concrete proof that the correction worked." },
+  { name: "Impact on global accuracy", desc: "Has the bias correction degraded the overall model performance?", threshold: "Acceptable if degradation < 10% of global error", plain: "Fixing a bias may reduce overall accuracy. The right balance between fairness and performance must be found." },
+  { name: "Per-group fairness before and after", desc: "Does improving one group's fairness not degrade another group?", threshold: "Alert if a group degrades by more than 0.05 after correction", plain: "When correcting a bias, we check that all groups benefit - not just the one we targeted." }
+] }, mitigation: { fr: [{ name: "Calibration après entraînement (recalibration des probabilités)", phase: "Post-traitement", desc: "Ajuster les probabilités de sortie séparément pour chaque groupe." }, { name: "Seuils différenciés (Reweighting)", phase: "Post-traitement", desc: "Appliquer des seuils de décision différents selon le groupe." }, { name: "Equalized Odds Post-processing", phase: "Post-traitement", desc: "Implémentation : outil d'analyse d'équité, outil d'équité." }], en: [{ name: "Post-hoc calibration (recalibration des probabilités)", phase: "Post-processing", desc: "Adjust output probabilities separately for each group." }, { name: "Differentiated thresholds (Reweighting)", phase: "Post-processing", desc: "Apply different decision thresholds depending on group." }, { name: "Equalized Odds Post-processing", phase: "Post-processing", desc: "Implementation: outil d'analyse d'équité, outil d'équité." }] }, los: { fr: "Application d'un seuil différencié par spécialité + reweighting. Réévaluation écart de performance entre groupes/écart d'équité des chances avant publication du modèle corrigé.", en: "Applying differentiated threshold per specialty + reweighting. écart de performance entre groupes/écart d'équité des chances re-evaluation before publishing the corrected model." } },
+        { id: 7, hex: "#84cc16", title: { fr: "Mise hors service", en: "Retirement" }, sub: { fr: "Suppression données et modèle, déclassement", en: "Data and model deletion, decommissioning" }, tags: ["biais", "metriques", "mitigation"], desc: { fr: "Tout système d'IA atteint sa fin de vie. Planification documentée avec critères de retrait, archivage des modèles et données.", en: "Every AI system reaches end-of-life. Documented planning with retirement criteria, model and data archiving." }, actions: { fr: ["Définir des critères documentés de mise hors service", "Planifier la transition vers un modèle de remplacement", "Archiver les modèles, données et documentations", "Réaliser un bilan des biais et incidents du cycle de vie", "Partager les leçons apprises pour les futurs systèmes"], en: ["Define documented decommissioning criteria", "Plan the transition to a replacement model", "Archive models, data and documentation", "Conduct a bias and incident review for the lifecycle", "Share lessons learned for future systems"] }, biais: ["biais-derive", "biais-usage"], normes: ["protection des données personnelles", "AI Act UE"], metriques: { fr: [
+  { name: "Inventaire des systèmes IA en production", desc: "L'hôpital sait-il exactement quels modèles IA sont utilisés et depuis quand ?", threshold: "Objectif : aucun système sans évaluation de moins de 12 mois", plain: "Sans registre, un modèle de 2018 peut encore être utilisé en 2025 sans que personne ne s'en rende compte." },
+  { name: "Date de la dernière évaluation d'équité", desc: "Quand a-t-on vérifié pour la dernière fois que le modèle est encore équitable ?", threshold: "Alerte si dernière évaluation > 12 mois", plain: "Un modèle validé il y a 3 ans n'est pas forcément valide aujourd'hui. Les pratiques médicales et les patients changent." },
+  { name: "Biais résiduels documentés", desc: "Les biais non résolus sont-ils clairement documentés pour l'équipe suivante ?", threshold: "Tout biais non corrigé doit être listé dans le rapport final", plain: "Quand on retire un modèle, on documente ce qui n'a pas marché. L'équipe suivante ne devrait pas reproduire les mêmes erreurs." }
+], en: [
+  { name: "Inventory of AI systems in production", desc: "Does the hospital know exactly which AI models are in use and since when?", threshold: "Target: no system without an assessment less than 12 months old", plain: "Without a register, a 2018 model may still be in use in 2025 without anyone realising." },
+  { name: "Date of last fairness assessment", desc: "When was the model last checked for fairness?", threshold: "Alert if last assessment > 12 months ago", plain: "A model validated 3 years ago is not necessarily valid today. Medical practices and patients change." },
+  { name: "Documented residual biases", desc: "Are unresolved biases clearly documented for the next team?", threshold: "All uncorrected biases must be listed in the final report", plain: "When retiring a model, we document what didn't work. The next team should not reproduce the same mistakes." }
+] }, mitigation: { fr: [{ name: "Plan de retrait documenté", phase: "Post-traitement", desc: "Critères déclenchant le retrait : dégradation des performances, nouveau biais détecté." }, { name: "Information des parties prenantes", phase: "Post-traitement", desc: "Communiquer clairement aux cliniciens et équipes les raisons du retrait." }, { name: "Bilan des biais (rapport final)", phase: "Post-traitement", desc: "Lister tous les biais identifiés, corrections et biais résiduels non résolus." }], en: [{ name: "Documented retirement plan", phase: "Post-processing", desc: "Criteria triggering retirement: performance degradation, new bias detected." }, { name: "Stakeholder communication", phase: "Post-processing", desc: "Clearly communicate retirement reasons to clinicians and teams." }, { name: "Bias review (final report)", phase: "Post-processing", desc: "List all identified biases, corrections and unresolved residual biases." }] }, los: { fr: "Le modèle XGBoost doit être retiré de manière contrôlée. Archiver les performances finales, biais identifiés et leçons apprises.", en: "The XGBoost model must be retired in a controlled manner. Archive final performance, identified biases and lessons learned." } }
+      ];
+
+      const BIAIS_DATA = {
+        "biais-confirmation": {
+          fr: { name: "Biais de confirmation", def: "On cherche sans s'en rendre compte des informations qui confirment ce qu'on croit déjà, et on ignore ce qui nous contredit. En santé, cela peut amener un développeur à collecter des données qui valident ses hypothèses plutôt que la réalité.", example: "Un médecin convaincu que les patients âgés restent toujours longtemps à l'hôpital va surtout collecter des cas qui le confirment - et le modèle apprendra cette idée reçue." },
+          en: { name: "Confirmation bias", def: "We unconsciously look for information that confirms what we already believe, ignoring what contradicts us. In healthcare, this can lead a developer to collect data that validates their assumptions rather than reality.", example: "A doctor convinced that elderly patients always stay long will mainly collect cases that confirm it - and the model will learn this preconception." }
+        },
+        "biais-implicite": {
+          fr: { name: "Biais implicite", def: "Des associations ou des jugements qu'on fait sans s'en rendre compte, basés sur nos expériences passées. Ces préjugés inconscients influencent les choix faits lors de la conception du modèle.", example: "Un développeur pourrait concevoir le modèle en imaginant un patient 'typique' qui ne représente pas tous les profils de patients réels de l'hôpital." },
+          en: { name: "Implicit bias", def: "Associations or judgments we make without realising, based on past experiences. These unconscious prejudices influence choices made when designing the model.", example: "A developer might design the model imagining a 'typical' patient who does not represent all real patient profiles in the hospital." }
+        },
+        "biais-societal": {
+          fr: { name: "Biais sociétal", def: "Des inégalités présentes dans la société se retrouvent dans les données historiques. Quand un modèle apprend sur ces données, il reproduit et parfois amplifie ces inégalités.", example: "Des données hospitalières anciennes peuvent refléter des inégalités d'accès aux soins selon le statut social - le modèle risque de perpétuer ces inégalités." },
+          en: { name: "Societal bias", def: "Inequalities present in society appear in historical data. When a model learns from this data, it reproduces and sometimes amplifies these inequalities.", example: "Old hospital data may reflect inequalities in access to care based on social status - the model risks perpetuating these inequalities." }
+        },
+        "biais-representation": {
+          fr: { name: "Biais de représentation", def: "Certains groupes de patients sont beaucoup plus présents que d'autres dans les données. Le modèle apprend mieux pour les groupes les plus fréquents et moins bien pour les groupes rares.", example: "La médecine interne représente 37% des données de l'hôpital ULSBA. Le modèle est donc bien meilleur pour ces patients que pour les patients ORL qui sont quasi absents des données." },
+          en: { name: "Representation bias", def: "Some patient groups are much more present than others in the data. The model learns better for the most frequent groups and worse for rare groups.", example: "Internal medicine represents 37% of ULSBA hospital data. The model is therefore much better for these patients than for ENT patients who are nearly absent from the data." }
+        },
+        "biais-qualite": {
+          fr: { name: "Biais de qualité des données", def: "Quand les informations dans les dossiers médicaux sont incomplètes ou absentes pour certains groupes de patients. Si un groupe a plus de données manquantes, le modèle sera moins précis pour ces patients.", example: "Dans nos données, 15,7% des dossiers n'ont pas de diagnostic renseigné. Certaines spécialités comme l'ORL atteignent 40-45% de données manquantes - le modèle est presque aveugle pour ces patients." },
+          en: { name: "Data quality bias", def: "When information in medical records is incomplete or missing for some patient groups. If one group has more missing data, the model will be less accurate for these patients.", example: "In our data, 15.7% of records have no diagnosis. Some specialties like ENT reach 40-45% missing data - the model is almost blind for these patients." }
+        },
+        "biais-selection": {
+          fr: { name: "Biais de sélection", def: "Certains types de patients ou de situations sont absents ou très rares dans les données, parce qu'ils n'ont pas été collectés de façon représentative.", example: "Les patients qui quittent l'hôpital pour des soins palliatifs sont très rares dans les données - le modèle n'a presque jamais vu ce type de cas et ne sait pas bien les gérer." },
+          en: { name: "Selection bias", def: "Certain types of patients or situations are absent or very rare in the data, because they were not collected representatively.", example: "Patients who leave hospital for palliative care are very rare in the data - the model has almost never seen this type of case and doesn't handle it well." }
+        },
+        "biais-temporel": {
+          fr: { name: "Biais temporel", def: "Les pratiques médicales et les profils de patients changent avec le temps. Un modèle entraîné sur d'anciennes données peut devenir inadapté sans que personne ne s'en rende compte.", example: "Après le COVID-19, les durées de séjour ont changé dans beaucoup de services. Un modèle entraîné avant 2020 continue de prédire selon une réalité qui n'existe plus." },
+          en: { name: "Temporal bias", def: "Medical practices and patient profiles change over time. A model trained on old data can become unsuitable without anyone noticing.", example: "After COVID-19, length of stay changed in many wards. A model trained before 2020 keeps predicting based on a reality that no longer exists." }
+        },
+        "biais-pretraitement": {
+          fr: { name: "Biais de prétraitement", def: "Les transformations appliquées aux données avant l'entraînement - comme regrouper des valeurs ou supprimer des cas extrêmes - peuvent modifier la réalité et créer des déséquilibres.", example: "En regroupant la durée de séjour en 4 catégories, 60% des patients tombent dans la même catégorie. Le modèle apprend surtout à reconnaître cette catégorie majoritaire." },
+          en: { name: "Preprocessing bias", def: "Transformations applied to data before training - like grouping values or removing extreme cases - can modify reality and create imbalances.", example: "By grouping length of stay into 4 categories, 60% of patients fall into the same category. The model mainly learns to recognise this majority category." }
+        },
+        "biais-aggregation": {
+          fr: { name: "Biais d'agrégation", def: "Quand on regroupe des patients très différents dans un seul chiffre moyen, on cache des réalités très différentes selon les groupes.", example: "La durée de séjour moyenne est 7,6 jours. Mais derrière ce chiffre se cachent 5 jours en chirurgie et 15 jours en médecine interne - des réalités complètement différentes." },
+          en: { name: "Aggregation bias", def: "When we group very different patients into a single average figure, we hide very different realities across groups.", example: "The average length of stay is 7.6 days. But behind this figure lies 5 days in surgery and 15 days in internal medicine - completely different realities." }
+        },
+        "biais-distribution": {
+          fr: { name: "Biais de distribution", def: "La durée de séjour est très inégalement répartie - la plupart des patients restent peu de temps mais quelques-uns restent très longtemps. Cette asymétrie perturbe l'apprentissage du modèle.", example: "75% des patients restent moins de 8 jours, mais certains restent jusqu'à 462 jours. Le modèle se concentre sur les cas courts et prédit mal les longues hospitalisations." },
+          en: { name: "Distribution bias", def: "Length of stay is very unevenly distributed - most patients stay a short time but a few stay very long. This asymmetry disrupts model learning.", example: "75% of patients stay less than 8 days, but some stay up to 462 days. The model focuses on short stays and poorly predicts long hospitalisations." }
+        },
+        "biais-classe-majoritaire": {
+          fr: { name: "Biais de la classe majoritaire", def: "Quand un groupe de patients est beaucoup plus représenté que les autres, le modèle apprend surtout à bien prédire pour ce groupe et néglige les autres.", example: "60% des séjours sont de longue durée dans nos données. Le modèle prédit bien les longs séjours mais se trompe souvent sur les séjours courts ou très longs." },
+          en: { name: "Majority class bias", def: "When one group of patients is much more represented than others, the model mainly learns to predict well for this group and neglects the others.", example: "60% of stays are long-duration in our data. The model predicts long stays well but often errs on short or very long stays." }
+        },
+        "biais-algorithme": {
+          fr: { name: "Biais de choix du modèle", def: "Le type de modèle informatique choisi pour faire les prédictions peut avantager certains groupes de patients par rapport à d'autres, selon la façon dont il fonctionne.", example: "Le modèle XGBoost cherche à minimiser l'erreur globale. Il sera très précis pour les services les plus fréquents comme la médecine interne, et moins précis pour les services rares." },
+          en: { name: "Algorithm selection bias", def: "The type of computer model chosen to make predictions can favour some patient groups over others, depending on how it works.", example: "The XGBoost model seeks to minimise overall error. It will be very accurate for the most frequent wards like internal medicine, and less accurate for rare wards." }
+        },
+        "biais-informativite": {
+          fr: { name: "Biais d'informativité", def: "Les informations disponibles dans les données n'expliquent pas aussi bien la durée de séjour pour tous les groupes. Pour certains services, les données ne suffisent pas à faire une bonne prédiction.", example: "Pour la médecine interne, le service et l'âge suffisent à bien prédire la durée de séjour. Pour les urgences atypiques, ces informations ne suffisent pas - le modèle est moins précis." },
+          en: { name: "Informativeness bias", def: "The information available in the data does not explain length of stay equally well for all groups. For some wards, the available data is not enough to make a good prediction.", example: "For internal medicine, ward and age are enough to predict length of stay well. For atypical emergencies, this information is not enough - the model is less accurate." }
+        },
+        "biais-confusion": {
+          fr: { name: "Variable confondante", def: "Une autre variable cachée explique en réalité la relation qu'on observe. On croit qu'une chose en cause une autre, mais c'est une troisième variable qui est vraiment responsable.", example: "On pense que l'âge allonge la durée de séjour. Mais c'est surtout le fait d'être admis en urgence qui l'explique - et les personnes âgées sont admises plus souvent en urgence." },
+          en: { name: "Confounding variable", def: "Another hidden variable actually explains the relationship we observe. We think one thing causes another, but a third variable is really responsible.", example: "We think age lengthens length of stay. But it is mainly emergency admission that explains it - and elderly people are admitted more often as emergencies." }
+        },
+        "biais-automatisation": {
+          fr: { name: "Biais d'automatisation", def: "Quand un professionnel de santé fait trop confiance aux recommandations d'un système informatique et arrête de les remettre en question, même quand le système se trompe.", example: "Un médecin accepte systématiquement la date de sortie proposée par le modèle sans vérifier si elle correspond à l'état réel du patient ce jour-là." },
+          en: { name: "Automation bias", def: "When a healthcare professional over-trusts the recommendations of a computer system and stops questioning them, even when the system is wrong.", example: "A doctor systematically accepts the discharge date proposed by the model without checking whether it matches the patient's actual condition that day." }
+        },
+        "biais-usage": {
+          fr: { name: "Biais d'usage hors contexte", def: "Utiliser un modèle dans un contexte différent de celui pour lequel il a été conçu et testé. Les prédictions peuvent être fausses car les patients sont différents.", example: "Un modèle entraîné sur des adultes dans un grand hôpital portugais ne devrait pas être utilisé tel quel dans un petit hôpital rural français sans être retesté au préalable." },
+          en: { name: "Out-of-context usage bias", def: "Using a model in a different context from the one it was designed and tested for. Predictions can be wrong because patients are different.", example: "A model trained on adults in a large Portuguese hospital should not be used as-is in a small rural French hospital without first being retested." }
+        },
+        "biais-derive": {
+          fr: { name: "Dérive du modèle", def: "Avec le temps, les patients changent et les pratiques médicales évoluent. Un modèle qui n'est pas mis à jour devient de moins en moins précis et équitable sans qu'on s'en rende compte.", example: "Après la COVID-19, les durées d'hospitalisation ont changé durablement. Un modèle de 2019 non mis à jour prédit toujours selon les réalités d'avant la pandémie." },
+          en: { name: "Model drift", def: "Over time, patients change and medical practices evolve. A model that is not updated becomes less and less accurate and fair without anyone noticing.", example: "After COVID-19, hospitalisation lengths changed permanently. A 2019 model not updated still predicts based on pre-pandemic realities." }
+        },
+        "biais-attribution-groupe": {
+          fr: { name: "Biais d'attribution de groupe", def: "Supposer que tous les membres d'un groupe ont les mêmes caractéristiques parce qu'on a observé quelque chose chez certains d'entre eux.", example: "Parce que certains patients âgés ont de longs séjours, on suppose que tous les patients âgés resteront longtemps. Mais un patient âgé en bonne santé peut très bien sortir rapidement." },
+          en: { name: "Group attribution bias", def: "Assuming that all members of a group have the same characteristics because we observed something in some of them.", example: "Because some elderly patients have long stays, we assume all elderly patients will stay long. But a healthy elderly patient can very well be discharged quickly." }
+        },
+        "biais-intragroupe": {
+          fr: { name: "Biais intra-groupe", def: "Tendance à favoriser les personnes qui nous ressemblent. En IA, cela se traduit par le fait de tester le système uniquement sur des profils similaires à l'équipe qui l'a développé.", example: "Si l'équipe qui développe le modèle vient uniquement de grands hôpitaux universitaires, elle testera surtout le modèle sur des données de grands hôpitaux - ignorant les petites structures." },
+          en: { name: "In-group bias", def: "Tendency to favour people who are like us. In AI, this means testing the system only on profiles similar to the development team.", example: "If the team developing the model comes only from large university hospitals, they will mainly test the model on large hospital data - ignoring smaller structures." }
+        },
+        "biais-horsgroupe": {
+          fr: { name: "Biais d'homogénéité hors-groupe", def: "Percevoir les membres d'un groupe auquel on n'appartient pas comme tous identiques, alors qu'en réalité ils sont très divers.", example: "Traiter tous les patients d'un service comme un groupe homogène avec les mêmes besoins, sans tenir compte des différences individuelles entre chaque patient." },
+          en: { name: "Out-group homogeneity bias", def: "Perceiving members of a group we don't belong to as all identical, when in reality they are very diverse.", example: "Treating all patients in a ward as a homogeneous group with the same needs, without accounting for individual differences between each patient." }
+        },
+        "biais-regles": {
+          fr: { name: "Biais de conception par règles", def: "Quand les règles définies manuellement par les développeurs reflètent leurs propres hypothèses plutôt que la réalité médicale de tous les patients.", example: "Fixer un seuil de 7 jours pour définir un séjour long parce qu'un médecin senior le considère ainsi - mais ce seuil n'est pas forcément pertinent pour toutes les spécialités." },
+          en: { name: "Rule-based design bias", def: "When rules manually defined by developers reflect their own assumptions rather than the medical reality of all patients.", example: "Setting a 7-day threshold to define a long stay because a senior doctor considers it so - but this threshold is not necessarily relevant for all specialties." }
+        },
+        "biais-exigences": {
+          fr: { name: "Biais d'exigences", def: "Les hypothèses faites au départ lors de la définition du projet introduisent des biais. Les développeurs conçoivent souvent le système pour des situations qu'ils connaissent, pas pour toutes les situations possibles.", example: "Définir des objectifs de performance basés sur un grand hôpital bien équipé, sans penser aux petits hôpitaux qui n'ont pas les mêmes ressources ni les mêmes types de patients." },
+          en: { name: "Requirements bias", def: "Assumptions made at the start when defining the project introduce biases. Developers often design the system for situations they know, not for all possible situations.", example: "Defining performance goals based on a large well-equipped hospital, without thinking about small hospitals that don't have the same resources or patient types." }
+        },
+        "biais-echantillonnage": {
+          fr: { name: "Biais d'échantillonnage", def: "Les données collectées ne représentent pas tous les types de patients de manière équilibrée - certains profils sont trop présents et d'autres trop absents.", example: "Si les données ont été collectées principalement en été, les cas d'infections respiratoires hivernales - plus complexes et plus longs - seront sous-représentés." },
+          en: { name: "Sampling bias", def: "The collected data does not represent all patient types in a balanced way - some profiles are overrepresented and others underrepresented.", example: "If data was collected mainly in summer, winter respiratory infections - more complex and longer - will be underrepresented." }
+        },
+        "biais-couverture": {
+          fr: { name: "Biais de couverture", def: "Les données du modèle ne correspondent pas aux patients pour lesquels on va réellement l'utiliser. Le modèle a appris sur une population différente de celle qu'il doit servir.", example: "Le modèle a été entraîné sur des données d'un hôpital portugais, mais on veut l'utiliser dans un hôpital français avec des pratiques et une population différentes." },
+          en: { name: "Coverage bias", def: "The model's data does not match the patients it will actually be used for. The model learned on a different population from the one it must serve.", example: "The model was trained on data from a Portuguese hospital, but we want to use it in a French hospital with different practices and population." }
+        },
+        "biais-non-reponse": {
+          fr: { name: "Biais de non-réponse", def: "Certains patients ont des dossiers plus incomplets que d'autres - pas parce que leurs données n'existent pas, mais parce qu'elles n'ont pas été enregistrées. Ces patients sont mal représentés.", example: "Les patients qui quittent l'hôpital contre l'avis médical ont souvent des dossiers incomplets. Le modèle n'a presque jamais vu ces cas et ne sait pas bien les gérer." },
+          en: { name: "Non-response bias", def: "Some patients have more incomplete records than others - not because their data doesn't exist, but because it wasn't recorded. These patients are poorly represented.", example: "Patients who leave hospital against medical advice often have incomplete records. The model has almost never seen these cases and doesn't handle them well." }
+        },
+        "biais-etiquetage": {
+          fr: { name: "Biais d'étiquetage", def: "La façon dont on classe les durées de séjour en catégories introduit des choix arbitraires qui influencent ce que le modèle apprend.", example: "Décider qu'un séjour de 7 jours est long pour tous les services est arbitraire - 7 jours peut être normal en médecine interne mais très long en chirurgie ambulatoire." },
+          en: { name: "Data labelling bias", def: "The way we classify lengths of stay into categories introduces arbitrary choices that influence what the model learns.", example: "Deciding that a 7-day stay is long for all wards is arbitrary - 7 days may be normal in internal medicine but very long in day surgery." }
+        },
+        "biais-entrain-distribue": {
+          fr: { name: "Biais d'entraînement multi-sites", def: "Quand un modèle est entraîné sur des données de plusieurs hôpitaux, chaque hôpital a ses propres pratiques. Si certains hôpitaux ne participent pas, leurs patients seront mal représentés.", example: "Dans un modèle entraîné sur plusieurs hôpitaux, si l'hôpital pédiatrique ne participe pas, le modèle n'a jamais appris à gérer les enfants." },
+          en: { name: "Multi-site training bias", def: "When a model is trained on data from several hospitals, each hospital has its own practices. If some hospitals don't participate, their patients will be poorly represented.", example: "In a model trained on several hospitals, if the paediatric hospital doesn't participate, the model has never learned to handle children." }
+        },
+        "biais-hyperparametres": {
+          fr: { name: "Biais de réglages du modèle", def: "Les choix techniques faits lors de la configuration du modèle peuvent avantager certains groupes de patients par rapport à d'autres.", example: "Fixer le seuil de séjour long à 7 jours pour tout l'hôpital convient à la médecine interne, mais pas à la chirurgie ambulatoire où 3 jours est déjà long." },
+          en: { name: "Model settings bias", def: "Technical choices made when configuring the model can favour some patient groups over others.", example: "Setting the long stay threshold at 7 days for the whole hospital suits internal medicine, but not day surgery where 3 days is already long." }
+        },
+        "biais-expressivite": {
+          fr: { name: "Biais d'expressivité du modèle", def: "Certains modèles sont trop simples pour comprendre des situations complexes. Pour les patients avec plusieurs maladies simultanées, un modèle basique ne capture pas toute la complexité.", example: "Un modèle simple prédit bien les patients avec une seule pathologie. Mais pour un patient âgé avec 5 maladies chroniques, il simplifie trop et se trompe souvent." },
+          en: { name: "Model expressiveness bias", def: "Some models are too simple to understand complex situations. For patients with several simultaneous diseases, a basic model cannot capture the full complexity.", example: "A simple model predicts well for patients with a single condition. But for an elderly patient with 5 chronic diseases, it oversimplifies and often errs." }
+        }
+      };
+
+      function getBiais(k) { const e = BIAIS_DATA[k]; return e ? e[currentLang] || e.fr : null; }
+
+      let cycleInitialized = false, activeNodeId = null, particles = [], arcAnimFrame = null, arenaW, arenaH, arenaCX, arenaCY, arenaR;
+
+      function initCycle() {
+        if (cycleInitialized) return;
+        cycleInitialized = true;
+        const arena = document.getElementById("cycleArena");
+        arenaW = arena.getBoundingClientRect().width || arena.offsetWidth;
+        arenaH = arena.getBoundingClientRect().height || arena.offsetHeight;
+        arenaCX = arenaW / 2; arenaCY = arenaH / 2;
+        arenaR = Math.min(arenaW, arenaH) * 0.36;
+        const N = CYCLES.length;
+        const arcCanvas = document.getElementById("arc-canvas");
+        arcCanvas.width = arenaW; arcCanvas.height = arenaH;
+        const actx = arcCanvas.getContext("2d");
+        const pCanvas = document.getElementById("particle-canvas");
+        pCanvas.width = arenaW; pCanvas.height = arenaH;
+        const pctx = pCanvas.getContext("2d");
+        initParticles(pCanvas, pctx, CYCLES.map((c, i) => { const a = ((2 * Math.PI) / N) * i - Math.PI / 2; return { x: arenaCX + arenaR * Math.cos(a), y: arenaCY + arenaR * Math.sin(a), color: c.hex }; }));
+        buildNodes();
+        let tick = 0;
+        function drawArcs() {
+          arcCanvas.width = arenaW; actx.clearRect(0, 0, arenaW, arenaH); tick++;
+          const speed = 0.8; const arcR = arenaR;
+          CYCLES.forEach((cycle, i) => {
+            const aA = ((2 * Math.PI) / N) * i - Math.PI / 2;
+            const aB = ((2 * Math.PI) / N) * ((i + 1) % N) - Math.PI / 2;
+            const gap = 0.15;
+            let startAng = aA + gap; let endAng = aB - gap;
+            if (endAng <= startAng) endAng += 2 * Math.PI;
+            const pulse = 0.55 + 0.45 * Math.sin(tick * 0.05 + i * ((Math.PI * 2) / N));
+            actx.beginPath(); actx.arc(arenaCX, arenaCY, arcR, startAng, endAng, false);
+            actx.strokeStyle = cycle.hex + "44"; actx.lineWidth = 7; actx.setLineDash([]); actx.stroke();
+            actx.beginPath(); actx.arc(arenaCX, arenaCY, arcR, startAng, endAng, false);
+            actx.strokeStyle = cycle.hex + "dd"; actx.lineWidth = 2.2; actx.setLineDash([]); actx.stroke();
+            const dt = (tick * speed * 0.007 + i / N) % 1;
+            const dotAng = startAng + (endAng - startAng) * dt;
+            const dtx = arenaCX + arcR * Math.cos(dotAng); const dty = arenaCY + arcR * Math.sin(dotAng);
+            actx.beginPath(); actx.arc(dtx, dty, 3, 0, Math.PI * 2);
+            actx.fillStyle = "#fff"; actx.shadowColor = cycle.hex; actx.shadowBlur = 10; actx.fill(); actx.shadowBlur = 0;
+          });
+          arcAnimFrame = requestAnimationFrame(drawArcs);
+        }
+        drawArcs();
+      }
+
+      function buildNodes() {
+        const container = document.getElementById("nodes-container"); container.innerHTML = "";
+        const N = CYCLES.length;
+        CYCLES.forEach((cycle, i) => {
+          const angle = ((2 * Math.PI) / N) * i - Math.PI / 2, x = arenaCX + arenaR * Math.cos(angle), y = arenaCY + arenaR * Math.sin(angle);
+          const div = document.createElement("div"); div.className = "cnode";
+          div.dataset.id = cycle.id; div.dataset.tags = cycle.tags.join(" ");
+          div.dataset.risk = [2, 3, 5].includes(cycle.id) ? "high" : "medium";
+          div.style.left = x + "px"; div.style.top = y + "px"; div.style.setProperty("--node-color", cycle.hex);
+          if (activeNodeId === cycle.id) div.classList.add("active");
+          const labels = { fr: { biais: " biais", metriques: " métriques" }, en: { biais: " bias", metriques: " metrics" } };
+          const chipsHtml = cycle.tags.map((tg) => `<span class="cnode-chip">${(labels[currentLang] || labels.fr)[tg] || tg}</span>`).join("");
+          div.innerHTML = `<div class="cnode-inner"><div class="cnode-head"><div class="cnode-num" style="--node-color:${cycle.hex}">${cycle.id}</div><div><div class="cnode-title">${t(cycle.title)}</div></div></div><div class="cnode-sub">${t(cycle.sub)}</div><div class="cnode-chips">${chipsHtml}</div></div>`;
+          div.addEventListener("click", () => openPanel(cycle));
+          container.appendChild(div);
+          div.style.opacity = "0"; div.style.transform = "translate(-50%,-50%) scale(0.6)";
+          setTimeout(() => { div.style.transition = "opacity 0.5s ease,transform 0.5s cubic-bezier(0.34,1.56,0.64,1)"; div.style.opacity = "1"; div.style.transform = "translate(-50%,-50%) scale(1)"; }, 100 + i * 120);
+        });
+      }
+
+      function refreshCycleNodes() {
+        if (!cycleInitialized) return; buildNodes();
+        if (activeNodeId) { document.querySelectorAll(".cnode").forEach((n) => { n.classList.toggle("dimmed", parseInt(n.dataset.id) !== activeNodeId); n.classList.toggle("active", parseInt(n.dataset.id) === activeNodeId); }); }
+      }
+
+      function initParticles(canvas, ctx, nodes) {
+        particles = [];
+        for (let i = 0; i < 60; i++) {
+          const node = nodes[Math.floor(Math.random() * nodes.length)];
+          particles.push({ x: node.x + (Math.random() - 0.5) * 200, y: node.y + (Math.random() - 0.5) * 200, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, r: Math.random() * 1.5 + 0.5, color: node.color, alpha: Math.random() * 0.4 + 0.1, life: Math.random() });
+        }
+        function animP() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach((p) => {
+            p.x += p.vx; p.y += p.vy; p.life += 0.004;
+            const a = p.alpha * (0.5 + 0.5 * Math.sin(p.life * Math.PI * 2));
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = p.color + Math.round(a * 255).toString(16).padStart(2, "0"); ctx.fill();
+            if (p.x < 0 || p.x > canvas.width) p.x = p.x < 0 ? canvas.width : 0;
+            if (p.y < 0 || p.y > canvas.height) p.y = p.y < 0 ? canvas.height : 0;
+          });
+          requestAnimationFrame(animP);
+        }
+        animP();
+      }
+
+      function openPanel(cycle) { activeCycle = cycle; activeNodeId = cycle.id; activePanelTab = "overview"; openPanelForCycle(cycle, true); renderPanelContent(cycle, "overview"); }
+
+      function openPanelForCycle(cycle, withAnim) {
+        document.querySelectorAll(".cnode").forEach((n) => { n.classList.toggle("dimmed", parseInt(n.dataset.id) !== cycle.id); n.classList.toggle("active", parseInt(n.dataset.id) === cycle.id); });
+        const panel = document.getElementById("cycle-panel");
+        panel.style.setProperty("--panel-color", cycle.hex);
+        document.getElementById("panel-bar").style.background = cycle.hex + "14";
+        document.getElementById("panel-num").textContent = cycle.id; document.getElementById("panel-num").style.background = cycle.hex;
+        document.getElementById("panel-title").textContent = t(cycle.title); document.getElementById("panel-subtitle").textContent = t(cycle.sub);
+        const L = currentLang;
+        const tabLabels = { overview: L === "fr" ? "Vue d'ensemble" : "Overview", biais: `${L === "fr" ? "Biais" : "Bias"} (${cycle.biais.length})`, metrics: `${L === "fr" ? "Métriques" : "Metrics"} (${cycle.metriques[L]?.length || cycle.metriques.fr.length})`, mitig: `${L === "fr" ? "Mitigation" : "Mitigation"} (${cycle.mitigation[L]?.length || cycle.mitigation.fr.length})` };
+        const tabsEl = document.getElementById("panel-tabs");
+        tabsEl.innerHTML = Object.entries(tabLabels).map(([key, label], i) => `<button class="ptab${i === 0 || key === activePanelTab ? " active" : ""}" data-tab="${key}" style="--panel-color:${cycle.hex}">${label}</button>`).join("");
+        tabsEl.querySelectorAll(".ptab").forEach((btn) => { btn.addEventListener("click", () => { tabsEl.querySelectorAll(".ptab").forEach((b) => b.classList.remove("active")); btn.classList.add("active"); activePanelTab = btn.dataset.tab; renderPanelContent(cycle, activePanelTab); }); });
+        document.getElementById("panel-overlay").classList.add("open"); panel.classList.add("open");
+        if (withAnim) document.getElementById("panel-body").scrollTop = 0;
+      }
+
+      function renderPanelContent(cycle, tab) {
+        const body = document.getElementById("panel-body"), color = cycle.hex, L = currentLang;
+        const actionsLabel = L === "fr" ? "Actions clés" : "Key actions";
+        const losLabel = L === "fr" ? "Exemple LOS" : "LOS Example";
+        const biaisIntro = L === "fr" ? "Biais ISO/IEC 24027 identifiés à cette étape - cliquer pour la définition complète." : "ISO/IEC 24027 biases identified at this step - click for full definition.";
+        const metricsIntro = L === "fr" ? "Métriques d'équité et de performance recommandées pour cette étape." : "Recommended fairness and performance metrics for this step.";
+        const mitigIntro = L === "fr" ? "Méthodes de mitigation adaptées au contexte santé et référencées" : "Mitigation methods adapted to the healthcare context and referenced in";
+        const actions = cycle.actions[L] || cycle.actions.fr;
+        const metriques = cycle.metriques[L] || cycle.metriques.fr;
+        const mitigation = cycle.mitigation[L] || cycle.mitigation.fr;
+        if (tab === "overview") {
+          body.innerHTML = `<p class="pdesc">${t(cycle.desc)}</p><div style="margin-bottom:0.8rem;"><div class="psec-label" style="color:${color}">${actionsLabel}</div><div class="ptags">${actions.map((a) => `<span class="ptag ptag-action">▸ ${a}</span>`).join("")}</div></div>${cycle.los ? `<div class="los-box"><div class="los-box-label">${losLabel}</div><div class="los-box-text">${t(cycle.los)}</div></div>` : ""}`;
+        } else if (tab === "biais") {
+          body.innerHTML = `<p class="pdesc">${biaisIntro}</p><div class="ptags">${cycle.biais.map((b) => { const bd = getBiais(b); return bd ? `<button class="ptag ptag-bias" data-biais="${b}">${bd.name}</button>` : ""; }).join("")}</div>`;
+          body.querySelectorAll(".ptag-bias").forEach((btn) => btn.addEventListener("click", () => openBiasModal(btn.dataset.biais)));
+        } else if (tab === "metrics") {
+          const thresholdLabel = L === "fr" ? "Seuil" : "Threshold";
+          const toolLabel = L === "fr" ? "Outil" : "Tool";
+          const impactLabel = L === "fr" ? "Impact" : "Impact";
+          const plainLabel = L === "fr" ? "En clair" : "In plain terms";
+          body.innerHTML = `<p class="pdesc">${metricsIntro}</p>${metriques.map((m) => `<div class="metric-card"><div class="metric-card-name">${m.name}</div><div class="metric-card-desc">${m.desc}</div><div class="metric-card-meta">${m.threshold ? `<div class="metric-meta-row"><span class="metric-meta-label">${thresholdLabel}</span><span class="metric-meta-value metric-threshold">${m.threshold}</span></div>` : ""}${m.tool ? `<div class="metric-meta-row"><span class="metric-meta-label">${toolLabel}</span><span class="metric-meta-value">${m.tool}</span></div>` : ""}${m.impact ? `<div class="metric-meta-row"><span class="metric-meta-label">${impactLabel}</span><span class="metric-meta-value">${m.impact}</span></div>` : ""}</div>${m.plain ? `<div class="metric-plain"><div class="metric-plain-label">${plainLabel}</div>${m.plain}</div>` : ""}</div>`).join("")}`;
+        } else if (tab === "mitig") {
+          const sysLabel = L === "fr" ? "Le système" : "The system";
+          const humLabel = L === "fr" ? "Le clinicien" : "The clinician";
+          const sysActions = L === "fr" ? "Détecte · Alerte · Propose" : "Detects · Alerts · Proposes";
+          const humActions = L === "fr" ? "Examine · Valide · Décide" : "Examines · Validates · Decides";
+          const bannerTxt = L === "fr"
+            ? "Toute action de mitigation doit être validée par un clinicien avant application."
+            : "Any mitigation action must be validated by a clinician before application.";
+          const prudenceTxt = L === "fr"
+            ? "À appliquer avec prudence - un biais statistique ne signifie pas toujours un biais indésirable."
+            : "To be applied with caution - a statistical bias does not always mean an undesirable bias.";
+
+          // WPs needing supervision banner + 2 columns: 3, 4, 6
+          const needsSupervision = [3, 4, 6].includes(cycle.id);
+          // WPs with technical methods needing prudence note: 2, 5, 6
+          const needsPrudence = [2, 5, 6].includes(cycle.id);
+
+          const banner = needsSupervision
+            ? `<div class="mitig-banner"><span>⚠️</span><span>${bannerTxt}</span></div>`
+            : needsPrudence
+            ? `<div class="mitig-banner" style="border-color:#8b5cf6;background:rgba(139,92,246,0.06);color:#c4b5fd;"><span>ℹ️</span><span>${prudenceTxt}</span></div>`
+            : "";
+
+          body.innerHTML = banner + `<p class="pdesc">${mitigIntro}</p>${mitigation.map((m) => `<div class="mitig-card"><div class="mitig-card-phase">${m.phase}</div><div class="mitig-card-name">${m.name}</div><div class="mitig-card-desc">${m.desc}</div>${needsSupervision ? `<div class="mitig-supervision"><div class="mitig-col mitig-col-system"><div class="mitig-col-label">${sysLabel}</div><div class="mitig-col-text">${sysActions}</div></div><div class="mitig-col mitig-col-human"><div class="mitig-col-label">${humLabel}</div><div class="mitig-col-text">${humActions}</div></div></div>` : ""}</div>`).join("")}`;
+        }
+      }
+
+      function closePanel() {
+        document.getElementById("cycle-panel").classList.remove("open"); document.getElementById("panel-overlay").classList.remove("open");
+        document.querySelectorAll(".cnode").forEach((n) => n.classList.remove("active", "dimmed", "hidden"));
+        activeCycle = null; activeNodeId = null;
+      }
+      document.getElementById("panel-close").addEventListener("click", closePanel);
+      document.getElementById("panel-overlay").addEventListener("click", closePanel);
+
+      function openBiasModal(key) {
+        const bd = getBiais(key); if (!bd) return;
+        document.getElementById("bm-title").textContent = bd.name; document.getElementById("bm-en").textContent = bd.en;
+        document.getElementById("bm-body").textContent = bd.def; document.getElementById("bm-example").textContent = bd.example;
+        document.getElementById("bias-overlay").classList.add("open"); document.getElementById("bias-modal").classList.add("open");
+      }
+      function closeBiasModal() { document.getElementById("bias-overlay").classList.remove("open"); document.getElementById("bias-modal").classList.remove("open"); }
+      document.getElementById("bm-close").addEventListener("click", closeBiasModal);
+      document.getElementById("bias-overlay").addEventListener("click", closeBiasModal);
+
+      document.querySelectorAll(".cf-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".cf-btn").forEach((b) => b.classList.remove("active")); btn.classList.add("active");
+          const risk = btn.dataset.risk; closePanel();
+          setTimeout(() => { document.querySelectorAll(".cnode").forEach((n) => { if (risk === "all") { n.classList.remove("hidden"); } else { n.classList.toggle("hidden", n.dataset.risk !== risk); } }); }, 10);
+        });
+      });
+
+      window.addEventListener("resize", () => {
+        if (cycleInitialized) {
+          cycleInitialized = false; document.getElementById("nodes-container").innerHTML = "";
+          if (arcAnimFrame) cancelAnimationFrame(arcAnimFrame);
+          if (document.getElementById("cycle-section").style.display !== "none") initCycle();
+        }
+      });
+
+      // ---- STAT MODALS ----
+      const STAT_DATA = {
+        wps: {
+          fr: { title: "8 Work Packages", items: [
+            { num: "WP1", badge: "badge-mgmt", badgeLabel: "MGMT", title: "Gestion de projet", desc: "Coordination scientifique, administrative et financière du consortium. Pilotage UEvora." },
+            { num: "WP2", badge: "badge-ri", badgeLabel: "R&I", title: "Collecte des exigences & co-design des cas d'usage", desc: "Identification des besoins des parties prenantes santé. Définition des cas d'usage. Pilotage DCU." },
+            { num: "WP3", badge: "badge-ri", badgeLabel: "R&I", title: "Modèles d'IA explicables & métriques d'évaluation", desc: "Développement de modèles XAI (outils d'explication…) et métriques formelles d'explicabilité. Pilotage BUL." },
+            { num: "WP4", badge: "badge-ri", badgeLabel: "R&I", title: "Techniques de débiaisage, équité & lignes directrices", desc: "Identification et correction des biais données/modèle/humains. Métriques d'équité (écart de performance entre groupes, écart d'équité des chances…). Pilotage JYU." },
+            { num: "WP5", badge: "badge-ri", badgeLabel: "R&I", title: "IA sécurisée & préservant la vie privée", desc: "Apprentissage fédéré hybride, chiffrement homomorphe, confidentialité différentielle. Pilotage UNN." },
+            { num: "WP6", badge: "badge-ri", badgeLabel: "R&I", title: "Sélection multi-objectifs collaborative homme-machine", desc: "Optimisation Pareto sur explicabilité, équité et confidentialité. Human-in-the-loop. Pilotage TUDelft." },
+            { num: "WP7", badge: "badge-ri", badgeLabel: "R&I", title: "Implémentation, tests & évaluation dans les cas d'usage", desc: "Déploiement des solutions dans les 3 cas d'usage (France, UK, Thaïlande). Pilotage ULL & UJM." },
+            { num: "WP8", badge: "badge-diss", badgeLabel: "DISS", title: "Communication, dissémination, normalisation & exploitation", desc: "Publications, workshops, standardisation ISO/IEEE, brevets, site web. Pilotage UOL." }
+          ]},
+          en: { title: "8 Work Packages", items: [
+            { num: "WP1", badge: "badge-mgmt", badgeLabel: "MGMT", title: "Project Management", desc: "Scientific, administrative and financial coordination. Led by UEvora." },
+            { num: "WP2", badge: "badge-ri", badgeLabel: "R&I", title: "Requirements Gathering & Use Case Co-design", desc: "Healthcare stakeholder requirements. Use case definition. Led by DCU." },
+            { num: "WP3", badge: "badge-ri", badgeLabel: "R&I", title: "Explainable AI Models & Evaluation Metrics", desc: "XAI models (outils d'explication…) and formal explainability metrics. Led by BUL." },
+            { num: "WP4", badge: "badge-ri", badgeLabel: "R&I", title: "Bias Mitigation, Fairness Metrics & Guidelines", desc: "Identifying and correcting data/model/human biases. Fairness metrics (écart de performance entre groupes, écart d'équité des chances…). Led by JYU." },
+            { num: "WP5", badge: "badge-ri", badgeLabel: "R&I", title: "Secure & Privacy-Preserving AI", desc: "Hybrid federated learning, homomorphic encryption, differential privacy. Led by UNN." },
+            { num: "WP6", badge: "badge-ri", badgeLabel: "R&I", title: "Human-Machine Collaborative Multi-Objective Model Selection", desc: "Pareto optimisation over explainability, fairness and privacy. Human-in-the-loop. Led by TUDelft." },
+            { num: "WP7", badge: "badge-ri", badgeLabel: "R&I", title: "Implementation, Testing & Evaluation in Use Cases", desc: "Deploying solutions in 3 use cases (France, UK, Thailand). Led by ULL & UJM." },
+            { num: "WP8", badge: "badge-diss", badgeLabel: "DISS", title: "Communication, Dissemination, Standardisation & Exploitation", desc: "Publications, workshops, ISO/IEEE standardisation, patents, website. Led by UOL." }
+          ]}
+        },
+        partners: {
+          fr: { title: "15 Partenaires", items: [
+            { flag: "🇵🇹", short: "UEvora", name: "Université d'Évora", type: "type-acad", typeLabel: "Académique" },
+            { flag: "🇮🇪", short: "DCU", name: "Dublin City University", type: "type-acad", typeLabel: "Académique" },
+            { flag: "🇬🇧", short: "BUL", name: "Brunel University London", type: "type-acad", typeLabel: "Académique" },
+            { flag: "🇫🇮", short: "JYU", name: "Université de Jyväskylä", type: "type-acad", typeLabel: "Académique" },
+            { flag: "🇬🇧", short: "UNN", name: "Université de Northumbria", type: "type-acad", typeLabel: "Académique" },
+            { flag: "🇳🇱", short: "TUDelft", name: "Delft University of Technology", type: "type-acad", typeLabel: "Académique" },
+            { flag: "🇫🇷", short: "ULL", name: "Université Lumière Lyon 2", type: "type-acad", typeLabel: "Académique" },
+            { flag: "🇬🇧", short: "UOL", name: "Université de Leeds", type: "type-acad", typeLabel: "Académique / Santé" },
+            { flag: "🇫🇷", short: "UJM", name: "Université Jean Monnet", type: "type-acad", typeLabel: "Académique" },
+            { flag: "🇵🇹", short: "DECSIS", name: "Decsis II Ibéria", type: "type-ind", typeLabel: "Industrie" },
+            { flag: "🇫🇷", short: "AMC", name: "Atout Majeur Concept", type: "type-ind", typeLabel: "Industrie" },
+            { flag: "🇵🇹", short: "MLA", name: "Mekhane Logos Analytics", type: "type-ind", typeLabel: "Industrie" },
+            { flag: "🇵🇹", short: "ULSBA", name: "Unidade Local de Saúde do Baixo Alentejo", type: "type-hc", typeLabel: "Santé" },
+            { flag: "🇨🇦", short: "UOA", name: "Université d'Alberta", type: "type-acad", typeLabel: "Académique" },
+            { flag: "🇹🇭", short: "CMU", name: "Chiang Mai University", type: "type-acad", typeLabel: "Académique / Santé" }
+          ]},
+          en: { title: "15 Partners", items: [
+            { flag: "🇵🇹", short: "UEvora", name: "University of Évora", type: "type-acad", typeLabel: "Academic" },
+            { flag: "🇮🇪", short: "DCU", name: "Dublin City University", type: "type-acad", typeLabel: "Academic" },
+            { flag: "🇬🇧", short: "BUL", name: "Brunel University London", type: "type-acad", typeLabel: "Academic" },
+            { flag: "🇫🇮", short: "JYU", name: "University of Jyväskylä", type: "type-acad", typeLabel: "Academic" },
+            { flag: "🇬🇧", short: "UNN", name: "University of Northumbria", type: "type-acad", typeLabel: "Academic" },
+            { flag: "🇳🇱", short: "TUDelft", name: "Delft University of Technology", type: "type-acad", typeLabel: "Academic" },
+            { flag: "🇫🇷", short: "ULL", name: "University Lumière Lyon 2", type: "type-acad", typeLabel: "Academic" },
+            { flag: "🇬🇧", short: "UOL", name: "University of Leeds", type: "type-acad", typeLabel: "Academic / Healthcare" },
+            { flag: "🇫🇷", short: "UJM", name: "Jean Monnet University", type: "type-acad", typeLabel: "Academic" },
+            { flag: "🇵🇹", short: "DECSIS", name: "Decsis II Ibéria", type: "type-ind", typeLabel: "Industry" },
+            { flag: "🇫🇷", short: "AMC", name: "Atout Majeur Concept", type: "type-ind", typeLabel: "Industry" },
+            { flag: "🇵🇹", short: "MLA", name: "Mekhane Logos Analytics", type: "type-ind", typeLabel: "Industry" },
+            { flag: "🇵🇹", short: "ULSBA", name: "Unidade Local de Saúde do Baixo Alentejo", type: "type-hc", typeLabel: "Healthcare" },
+            { flag: "🇨🇦", short: "UOA", name: "University of Alberta", type: "type-acad", typeLabel: "Academic" },
+            { flag: "🇹🇭", short: "CMU", name: "Chiang Mai University", type: "type-acad", typeLabel: "Academic / Healthcare" }
+          ]}
+        },
+        usecases: {
+          fr: { title: "3 Cas d'usage", items: [
+            { num: "UC1", badge: "badge-ri", badgeLabel: "🇫🇷", title: "Gestion des ressources hospitalières", desc: "Prédiction de la durée de séjour (LOS) et optimisation des flux de patients en soins aigus. Partenaires : ULL, UJM, TUDelft, AMC, ULSBA." },
+            { num: "UC2", badge: "badge-ri", badgeLabel: "🇬🇧", title: "Physiothérapie et rééducation", desc: "IA de confiance pour le suivi de la réhabilitation physique. Partenaires : UOL (Leeds Teaching Hospitals), UNN, BUL, DCU, MLA." },
+            { num: "UC3", badge: "badge-ri", badgeLabel: "🇹🇭", title: "Prévention des troubles de mobilité chez les seniors", desc: "Détection et prévention des troubles de mobilité dans les populations âgées. Partenaires : CMU, UEvora, JYU, DECSIS, UOA." }
+          ]},
+          en: { title: "3 Use Cases", items: [
+            { num: "UC1", badge: "badge-ri", badgeLabel: "🇫🇷", title: "Hospital Resources Management", desc: "Length of Stay (LOS) prediction and patient flow optimisation in acute care. Partners: ULL, UJM, TUDelft, AMC, ULSBA." },
+            { num: "UC2", badge: "badge-ri", badgeLabel: "🇬🇧", title: "Physiotherapy and Rehabilitation", desc: "Trustworthy AI for physical rehabilitation monitoring. Partners: UOL (Leeds Teaching Hospitals), UNN, BUL, DCU, MLA." },
+            { num: "UC3", badge: "badge-ri", badgeLabel: "🇹🇭", title: "Elderly Mobility Disorder Prevention", desc: "Detection and prevention of mobility disorders in elderly populations. Partners: CMU, UEvora, JYU, DECSIS, UOA." }
+          ]}
+        }
+      };
+
+      function openStatModal(key) {
+        const data = STAT_DATA[key][currentLang] || STAT_DATA[key].fr;
+        document.getElementById("stat-modal-title").textContent = data.title;
+        const body = document.getElementById("stat-modal-body");
+        if (key === "wps") {
+          body.innerHTML = data.items.map(item => `
+            <div class="wp-item">
+              <div class="wp-num">${item.num}</div>
+              <div style="flex:1">
+                <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
+                  <div class="wp-info-title">${item.title}</div>
+                </div>
+                <div class="wp-info-desc">${item.desc}</div>
+              </div>
+            </div>`).join("");
+        } else if (key === "partners") {
+          body.innerHTML = data.items.map(item => `
+            <div class="partner-item">
+              <span class="partner-flag">${item.flag}</span>
+              <span class="partner-name">${item.name}</span>
+              <span class="partner-type ${item.type}">${item.typeLabel}</span>
+            </div>`).join("");
+        } else if (key === "usecases") {
+          body.innerHTML = data.items.map(item => `
+            <div class="wp-item">
+              <div class="wp-num" style="font-size:1rem;">${item.badgeLabel}</div>
+              <div style="flex:1">
+                <div class="wp-info-title" style="margin-bottom:0.3rem;">${item.title}</div>
+                <div class="wp-info-desc">${item.desc}</div>
+              </div>
+            </div>`).join("");
+        }
+        document.getElementById("stat-overlay").style.display = "block";
+        document.getElementById("stat-modal").style.display = "block";
+        document.getElementById("stat-modal").style.animation = "popIn 0.22s cubic-bezier(0.34,1.56,0.64,1)";
+      }
+      function closeStatModal() {
+        document.getElementById("stat-overlay").style.display = "none";
+        document.getElementById("stat-modal").style.display = "none";
+      }
+
+      // ---- SCREEN TOGGLE ----
+      function setScreen(mode) {
+        const btns = document.querySelectorAll(".screen-btn");
+        btns.forEach(b => b.classList.remove("active"));
+        event.target.classList.add("active");
+        document.body.className = "mode-" + mode;
+        // Always reset cycle so it recalculates with new dimensions
+        cycleInitialized = false;
+        document.getElementById("nodes-container").innerHTML = "";
+        if (arcAnimFrame) cancelAnimationFrame(arcAnimFrame);
+        if (document.getElementById("cycle-section").style.display !== "none") {
+          setTimeout(initCycle, 200);
+        }
+      }
+      document.body.classList.add("mode-desktop");
+    </script>
+  </div>
+  </body>
+</html>
